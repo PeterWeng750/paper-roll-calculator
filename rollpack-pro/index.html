@@ -1,0 +1,1657 @@
+<!doctype html>
+<html lang="th">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#12233d">
+    <title>RollPack Pro · วางแผนบรรจุม้วนกระดาษ</title>
+    <link rel="manifest" href="./manifest.webmanifest">
+    <link rel="icon" href="./icon.svg" type="image/svg+xml">
+    <style>
+        :root {
+            --ink: #172840;
+            --muted: #586a80;
+            --line: #dce4ef;
+            --blue: #245ce5;
+            --navy: #12233d;
+            --bg: #f3f6fb;
+            --soft: #edf3ff;
+            --radius: 18px;
+            font-family: Tahoma, 'Noto Sans Thai', system-ui, sans-serif;
+            color: var(--ink);
+            font-size: 16px;
+            line-height: 1.6
+        }
+
+        * {
+            box-sizing: border-box
+        }
+
+        body {
+            margin: 0;
+            background: var(--bg)
+        }
+
+        button,
+        input,
+        select {
+            font: inherit
+        }
+
+        button,
+        summary,
+        select {
+            cursor: pointer
+        }
+
+        button {
+            color: inherit
+        }
+
+        button:disabled {
+            cursor: default;
+            opacity: .45
+        }
+
+        button,
+        a,
+        input,
+        summary,
+        select {
+            touch-action: manipulation
+        }
+
+        button:focus-visible,
+        a:focus-visible,
+        input:focus-visible,
+        summary:focus-visible,
+        select:focus-visible {
+            outline: 3px solid #f39a27;
+            outline-offset: 3px
+        }
+
+        a {
+            color: var(--blue)
+        }
+
+        button {
+            min-height: 44px;
+            border: 1px solid var(--line);
+            background: white;
+            border-radius: 10px;
+            padding: 8px 14px;
+            font-size: .875rem;
+            font-weight: 600;
+            transition: background .15s, border-color .15s
+        }
+
+        button:hover {
+            background: var(--soft);
+            border-color: #a8bce8
+        }
+
+        h1,
+        h2,
+        h3,
+        p {
+            margin: 0
+        }
+
+        h1 {
+            font-size: 1.55rem;
+            letter-spacing: -.5px
+        }
+
+        h2 {
+            font-size: 1rem
+        }
+
+        h3 {
+            font-size: 1rem
+        }
+
+        .muted {
+            color: var(--muted)
+        }
+
+        .small {
+            font-size: .8125rem
+        }
+
+        .eyebrow {
+            font-size: .75rem;
+            letter-spacing: 1.5px;
+            font-weight: 700;
+            text-transform: uppercase
+        }
+
+        .num {
+            font-family: ui-sans-serif, system-ui, sans-serif;
+            font-variant-numeric: tabular-nums
+        }
+
+        .skip {
+            position: absolute;
+            top: -100px;
+            background: white;
+            padding: 10px;
+            z-index: 20
+        }
+
+        .skip:focus {
+            top: 0
+        }
+
+        header {
+            background: var(--navy);
+            color: white
+        }
+
+        header .bar {
+            max-width: 1440px;
+            margin: auto;
+            min-height: 76px;
+            padding: 14px 32px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font: 750 1.35rem system-ui, sans-serif;
+            letter-spacing: -.5px
+        }
+
+        .brand em {
+            font-style: normal;
+            color: #8eaeff
+        }
+
+        .brand-icon {
+            width: 38px;
+            height: 38px;
+            display: grid;
+            place-items: center;
+            background: var(--blue);
+            border-radius: 11px
+        }
+
+        .header-tools {
+            display: flex;
+            gap: 8px;
+            align-items: center
+        }
+
+        .header-tools button {
+            background: #ffffff0d;
+            color: #e4ebf8;
+            border-color: #ffffff25
+        }
+
+        .header-tools button:hover {
+            background: #ffffff20
+        }
+
+        .header-tools select {
+            background: #223651;
+            color: white;
+            border: 1px solid #43546c;
+            border-radius: 9px;
+            padding: 9px;
+            min-height: 44px;
+            font-size: .875rem
+        }
+
+        .header-tools label {
+            font-size: .8125rem;
+            color: #bdcbe0
+        }
+
+        main {
+            max-width: 1440px;
+            margin: auto;
+            padding: 26px 32px 48px
+        }
+
+        .intro {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            margin-bottom: 24px
+        }
+
+        .intro p {
+            font-size: .875rem;
+            margin-top: 4px
+        }
+
+        .live-label {
+            font-size: .8125rem;
+            color: var(--muted);
+            background: white;
+            border: 1px solid var(--line);
+            border-radius: 99px;
+            padding: 6px 12px;
+            white-space: nowrap
+        }
+
+        .workspace {
+            display: grid;
+            grid-template-columns: minmax(350px, 410px) minmax(0, 1fr);
+            gap: 24px;
+            align-items: start
+        }
+
+        .inputs {
+            display: grid;
+            gap: 18px
+        }
+
+        .card {
+            background: white;
+            border: 1px solid var(--line);
+            border-radius: var(--radius);
+            padding: 22px;
+            box-shadow: 0 3px 8px #12233d03
+        }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 17px
+        }
+
+        .step {
+            display: grid;
+            place-items: center;
+            width: 28px;
+            height: 28px;
+            border-radius: 8px;
+            background: var(--soft);
+            color: var(--blue);
+            font-size: .8125rem;
+            font-weight: 700;
+            flex-shrink: 0
+        }
+
+        .presets {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 9px
+        }
+
+        .preset {
+            text-align: left;
+            padding: 11px 13px;
+            border-radius: 11px;
+            position: relative
+        }
+
+        .preset strong {
+            display: block;
+            font-size: .9375rem
+        }
+
+        .preset span {
+            display: block;
+            color: var(--muted);
+            font-size: .8125rem;
+            font-weight: 400
+        }
+
+        .preset[aria-pressed=true],
+        .seg button[aria-pressed=true],
+        .layer-btn[aria-pressed=true] {
+            background: var(--soft);
+            border-color: var(--blue);
+            color: #194fcf
+        }
+
+        .preset[aria-pressed=true]:after {
+            content: '✓';
+            position: absolute;
+            right: 10px;
+            top: 9px;
+            color: var(--blue)
+        }
+
+        .preset.custom {
+            grid-column: 1/-1;
+            padding: 7px 13px;
+            text-align: center
+        }
+
+        .spec-summary {
+            margin-top: 14px;
+            line-height: 1.9;
+            font-size: .875rem;
+            color: var(--muted)
+        }
+
+        details {
+            margin-top: 14px;
+            border-top: 1px solid var(--line);
+            padding-top: 13px
+        }
+
+        summary {
+            font-size: .875rem;
+            font-weight: 600;
+            min-height: 35px;
+            color: #335176
+        }
+
+        details[open] summary {
+            margin-bottom: 13px
+        }
+
+        .fields {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px 12px
+        }
+
+        .field.full {
+            grid-column: 1/-1
+        }
+
+        label.field-label {
+            display: block;
+            font-size: .875rem;
+            margin-bottom: 6px;
+            font-weight: 500
+        }
+
+        .input-wrap {
+            position: relative
+        }
+
+        .input-wrap input {
+            width: 100%;
+            height: 48px;
+            padding: 9px 56px 9px 12px;
+            border: 1px solid #c5d1e1;
+            border-radius: 9px;
+            color: var(--ink);
+            background: #fcfdff;
+            font-size: 1rem;
+            font-family: ui-sans-serif, system-ui, sans-serif;
+            font-variant-numeric: tabular-nums
+        }
+
+        .input-wrap input:hover {
+            border-color: #819aba
+        }
+
+        .input-wrap input[aria-invalid=true] {
+            border-color: #c63e3e;
+            background: #fff8f8
+        }
+
+        .unit {
+            position: absolute;
+            right: 12px;
+            top: 12px;
+            font-size: .8125rem;
+            color: var(--muted);
+            pointer-events: none
+        }
+
+        .error {
+            color: #b32d2d;
+            font-size: .8125rem;
+            margin-top: 5px
+        }
+
+        .error:empty {
+            display: none
+        }
+
+        .hint {
+            font-size: .8125rem;
+            color: var(--muted);
+            margin-top: 10px
+        }
+
+        .samples {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            flex-wrap: wrap;
+            margin-bottom: 17px
+        }
+
+        .samples span {
+            font-size: .8125rem;
+            color: var(--muted)
+        }
+
+        .samples button {
+            font-size: .8125rem;
+            min-height: 36px;
+            padding: 5px 9px;
+            font-weight: 400
+        }
+
+        .orientation {
+            margin-top: 20px
+        }
+
+        .orientation>p {
+            font-size: .875rem;
+            font-weight: 500;
+            margin-bottom: 8px
+        }
+
+        .seg {
+            display: flex;
+            gap: 6px
+        }
+
+        .seg button {
+            flex: 1;
+            padding: 8px 5px;
+            font-weight: 500
+        }
+
+        .seg button span {
+            font-family: system-ui, sans-serif;
+            display: block;
+            font-size: 1.2rem;
+            line-height: 1.2;
+            margin-bottom: 5px
+        }
+
+        .mobile-result {
+            display: none
+        }
+
+        .results {
+            min-width: 0;
+            display: grid;
+            gap: 18px
+        }
+
+        .results>.section-title {
+            margin-bottom: -5px
+        }
+
+        .result-main {
+            border-radius: var(--radius);
+            padding: 23px 26px;
+            background: var(--navy);
+            color: white;
+            position: relative;
+            overflow: hidden
+        }
+
+        .result-top {
+            display: flex;
+            justify-content: space-between;
+            gap: 16px;
+            align-items: flex-start
+        }
+
+        .result-main .eyebrow {
+            color: #aabdda
+        }
+
+        .result-main h2 {
+            font-size: 1rem;
+            color: #d7e2f5;
+            font-weight: 400
+        }
+
+        .count-line {
+            display: flex;
+            align-items: baseline;
+            gap: 10px;
+            margin: 4px 0
+        }
+
+        .big-count {
+            font-size: 4rem;
+            font-weight: 650;
+            line-height: 1.15;
+            letter-spacing: -2px
+        }
+
+        .result-main .count-line>span:last-child {
+            color: #b9c9e3
+        }
+
+        .status-pill {
+            border: 1px solid #4c6489;
+            color: #d9e6ff;
+            border-radius: 99px;
+            font-size: .8125rem;
+            padding: 5px 10px;
+            white-space: nowrap
+        }
+
+        .result-detail {
+            color: #bdcce4;
+            font-size: .875rem;
+            margin-top: 8px
+        }
+
+        .result-bottom {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            border-top: 1px solid #ffffff20;
+            margin-top: 19px;
+            padding-top: 16px
+        }
+
+        .result-bottom label {
+            display: block;
+            font-size: .8125rem;
+            color: #afc2df
+        }
+
+        .result-bottom strong {
+            font-size: 1.3rem;
+            display: block;
+            margin-top: 2px
+        }
+
+        .progress-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 8px;
+            font-size: .8125rem;
+            color: #b5c6e2;
+            margin-top: 16px
+        }
+
+        progress {
+            appearance: none;
+            display: block;
+            width: 100%;
+            height: 6px;
+            border: 0;
+            background: #354865;
+            border-radius: 9px;
+            margin-top: 8px;
+            overflow: hidden
+        }
+
+        progress::-webkit-progress-bar {
+            background: #354865
+        }
+
+        progress::-webkit-progress-value {
+            background: #79a0ff;
+            border-radius: 9px
+        }
+
+        progress::-moz-progress-bar {
+            background: #79a0ff
+        }
+
+        .notice {
+            font-size: .875rem;
+            background: #fff8e9;
+            border: 1px solid #f0dba9;
+            color: #78531c;
+            padding: 13px 16px;
+            border-radius: 12px
+        }
+
+        .notice p+p {
+            margin-top: 8px
+        }
+
+        .notice.error-state {
+            background: #fff2f2;
+            border-color: #edb8b8;
+            color: #9d2929
+        }
+
+        .plan-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 10px
+        }
+
+        .plan-header p {
+            font-size: .8125rem;
+            color: var(--muted);
+            margin-top: 4px
+        }
+
+        .view-label {
+            color: var(--muted);
+            font-size: .75rem;
+            border: 1px solid #dce4ef;
+            border-radius: 6px;
+            padding: 3px 7px;
+            white-space: nowrap
+        }
+
+        .diagram {
+            margin: 16px 0 12px;
+            background-color: #f7f9fd;
+            background-image: radial-gradient(#d8e2ef 1px, transparent 1px);
+            background-size: 16px 16px;
+            border: 1px solid #e3eaf3;
+            border-radius: 12px;
+            padding: 10px;
+            min-height: 220px;
+            display: grid;
+            align-items: center
+        }
+
+        .diagram svg {
+            display: block;
+            width: 100%;
+            height: auto;
+            max-height: 340px
+        }
+
+        .empty-diagram {
+            text-align: center;
+            padding: 38px 15px;
+            color: var(--muted);
+            font-size: .875rem
+        }
+
+        .plan-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            flex-wrap: wrap
+        }
+
+        .legend {
+            display: flex;
+            gap: 14px;
+            color: var(--muted);
+            font-size: .8125rem;
+            flex-wrap: wrap
+        }
+
+        .legend span {
+            display: flex;
+            align-items: center;
+            gap: 6px
+        }
+
+        .swatch {
+            width: 10px;
+            height: 10px;
+            background: #366bed;
+            border-radius: 50%;
+            display: inline-block
+        }
+
+        .swatch.empty {
+            background: transparent;
+            border: 1px dashed #99a9bf
+        }
+
+        .swatch.door {
+            border-radius: 2px;
+            background: #e59b27
+        }
+
+        .layers {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+            font-size: .8125rem
+        }
+
+        .layers button {
+            min-width: 38px;
+            min-height: 38px;
+            padding: 5px 10px
+        }
+
+        .mini-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            margin-top: 18px;
+            padding-top: 16px;
+            border-top: 1px solid var(--line);
+            gap: 15px
+        }
+
+        .mini-stats span {
+            font-size: .8125rem;
+            color: var(--muted);
+            display: block
+        }
+
+        .mini-stats strong {
+            display: block;
+            font-size: 1.125rem;
+            margin-top: 2px
+        }
+
+        .comparison {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: .875rem
+        }
+
+        .comparison td,
+        .comparison th {
+            text-align: left;
+            padding: 10px 8px;
+            border-bottom: 1px solid #edf1f7
+        }
+
+        .comparison th {
+            color: var(--muted);
+            font-weight: 500;
+            font-size: .8125rem
+        }
+
+        .comparison td:last-child,
+        .comparison th:last-child {
+            text-align: right
+        }
+
+        .comparison .chosen {
+            background: var(--soft);
+            color: #194fcf
+        }
+
+        .table-scroll {
+            overflow-x: auto
+        }
+
+        .notes {
+            font-size: .8125rem;
+            color: var(--muted);
+            padding: 0 5px
+        }
+
+        .notes p+p {
+            margin-top: 7px
+        }
+
+        .footer {
+            margin-top: 28px;
+            color: var(--muted);
+            font-size: .75rem;
+            display: flex;
+            justify-content: space-between;
+            gap: 15px
+        }
+
+        dialog {
+            border: 1px solid var(--line);
+            border-radius: 18px;
+            max-width: 490px;
+            width: calc(100% - 32px);
+            padding: 25px;
+            color: var(--ink);
+            box-shadow: 0 24px 100px #0f234344
+        }
+
+        dialog::backdrop {
+            background: #10244088
+        }
+
+        dialog p {
+            font-size: .9375rem;
+            margin-top: 12px
+        }
+
+        dialog .actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 9px;
+            margin-top: 23px
+        }
+
+        .primary {
+            background: var(--blue);
+            border-color: var(--blue);
+            color: white
+        }
+
+        .primary:hover {
+            background: #194cc8;
+            color: white
+        }
+
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0
+        }
+
+        [hidden] {
+            display: none !important
+        }
+
+        @media(min-width:1100px) {
+            .results {
+                position: sticky;
+                top: 20px
+            }
+        }
+
+        @media(max-width:900px) {
+            header .bar {
+                padding: 12px 20px
+            }
+
+            main {
+                padding: 22px 20px
+            }
+
+            .workspace {
+                grid-template-columns: minmax(290px, 340px) minmax(0, 1fr);
+                gap: 16px
+            }
+
+            .card {
+                padding: 18px
+            }
+
+            .result-main {
+                padding: 20px
+            }
+
+            .result-top {
+                flex-wrap: wrap
+            }
+
+            .status-pill {
+                white-space: normal
+            }
+
+            .big-count {
+                font-size: 3.5rem
+            }
+
+            .result-bottom {
+                gap: 10px
+            }
+
+            .mini-stats {
+                gap: 10px
+            }
+
+            .intro .live-label {
+                display: none
+            }
+        }
+
+        @media(max-width:700px) {
+            header .bar {
+                padding: 12px 16px;
+                flex-wrap: wrap;
+                gap: 12px
+            }
+
+            .brand {
+                font-size: 1.2rem
+            }
+
+            .header-tools {
+                flex-wrap: wrap;
+                gap: 7px
+            }
+
+            .header-tools label {
+                display: none
+            }
+
+            main {
+                padding: 20px 16px 90px
+            }
+
+            .intro {
+                margin-bottom: 18px
+            }
+
+            h1 {
+                font-size: 1.25rem
+            }
+
+            .workspace {
+                grid-template-columns: 1fr
+            }
+
+            .card {
+                padding: 20px
+            }
+
+            .results {
+                scroll-margin-top: 15px
+            }
+
+            .result-top {
+                flex-wrap: nowrap
+            }
+
+            .big-count {
+                font-size: 4rem
+            }
+
+            .mobile-result {
+                display: flex;
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                z-index: 10;
+                background: #ffffffed;
+                backdrop-filter: blur(8px);
+                border-top: 1px solid var(--line);
+                padding: 10px 16px max(10px, env(safe-area-inset-bottom));
+                align-items: center;
+                justify-content: space-between;
+                gap: 12px
+            }
+
+            .mobile-result span {
+                font-size: .875rem
+            }
+
+            .mobile-result button {
+                min-width: 135px
+            }
+
+            .footer {
+                flex-direction: column
+            }
+
+            .view-label {
+                display: none
+            }
+
+            .diagram {
+                min-height: 180px
+            }
+
+            .mini-stats strong {
+                font-size: 1rem
+            }
+        }
+
+        @media(max-width:380px) {
+            .fields {
+                grid-template-columns: 1fr
+            }
+
+            .result-top {
+                flex-wrap: wrap
+            }
+
+            .header-tools {
+                width: 100%
+            }
+
+            .mini-stats {
+                grid-template-columns: 1fr 1fr
+            }
+
+            .result-bottom {
+                grid-template-columns: 1fr
+            }
+
+            .header-tools select {
+                max-width: 180px
+            }
+        }
+
+        @media(prefers-reduced-motion:reduce) {
+            * {
+                scroll-behavior: auto !important;
+                transition: none !important
+            }
+        }
+
+        .view-switch {
+            display: flex;
+            gap: 5px;
+            flex-shrink: 0
+        }
+
+        .view-switch button {
+            font-weight: 500;
+            padding: 7px 12px;
+            min-height: 44px
+        }
+
+        .view-switch button[aria-pressed=true] {
+            background: var(--soft);
+            border-color: var(--blue);
+            color: #194fcf
+        }
+
+        .side-summary {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 16px
+        }
+
+        .side-summary div {
+            padding: 10px 12px;
+            border: 1px solid var(--line);
+            border-radius: 10px;
+            background: #f7f9fd
+        }
+
+        .side-summary span {
+            display: block;
+            font-size: .875rem;
+            color: var(--muted)
+        }
+
+        .side-summary strong {
+            display: block;
+            font-size: 1rem
+        }
+
+        .side-summary .height-warning {
+            background: #fff8e9;
+            border-color: #f0dba9;
+            color: #78531c
+        }
+
+        @media(max-width:900px) {
+            .plan-header {
+                flex-wrap: wrap
+            }
+
+            .view-switch {
+                margin-left: auto
+            }
+        }
+
+        @media(max-width:380px) {
+            .side-summary {
+                grid-template-columns: 1fr
+            }
+
+            .view-switch {
+                margin-left: 0;
+                width: 100%
+            }
+
+            .view-switch button {
+                flex: 1
+            }
+        }
+
+        .results-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 12px;
+            flex-wrap: wrap
+        }
+
+        .action-tools {
+            display: flex;
+            align-items: center;
+            gap: 8px
+        }
+
+        .action-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            min-height: 40px;
+            padding: 6px 14px;
+            border: 1px solid var(--line);
+            background: white;
+            color: var(--ink);
+            border-radius: 9px;
+            font-size: .875rem;
+            font-weight: 600;
+            transition: all .15s ease;
+            user-select: none
+        }
+
+        .action-btn:hover {
+            background: var(--soft);
+            border-color: #a8bce8;
+            color: var(--blue)
+        }
+
+        .action-btn svg {
+            width: 16px;
+            height: 16px;
+            flex-shrink: 0
+        }
+
+        .action-btn.btn-copied {
+            background: #e8f8ed;
+            border-color: #52c41a;
+            color: #1e7e34
+        }
+
+        .header-action-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            background: #ffffff15;
+            color: #e4ebf8;
+            border: 1px solid #ffffff30;
+            border-radius: 9px;
+            padding: 8px 12px;
+            min-height: 44px;
+            font-size: .875rem;
+            font-weight: 600;
+            transition: background .15s
+        }
+
+        .header-action-btn:hover {
+            background: #ffffff25;
+            color: white
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 28px;
+            left: 50%;
+            transform: translateX(-50%) translateY(40px);
+            background: var(--navy);
+            color: white;
+            padding: 10px 22px;
+            border-radius: 99px;
+            font-size: .875rem;
+            font-weight: 500;
+            box-shadow: 0 12px 32px rgba(18, 35, 61, .35);
+            border: 1px solid #ffffff25;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            z-index: 9999;
+            pointer-events: none;
+            opacity: 0;
+            transition: transform .25s cubic-bezier(.16, 1, .3, 1), opacity .25s ease
+        }
+
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1
+        }
+
+        .print-only {
+            display: none
+        }
+
+        @media print {
+            @page {
+                size: A4 portrait;
+                margin: 10mm 12mm
+            }
+
+            * {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+                color-adjust: exact !important
+            }
+
+            body {
+                background: white;
+                color: #111;
+                font-size: 12px;
+                line-height: 1.4
+            }
+
+            .skip,
+            header,
+            .inputs,
+            .action-tools,
+            .header-tools,
+            .samples,
+            .presets,
+            #container-details,
+            .view-switch,
+            #layer-controls,
+            .mobile-result,
+            dialog,
+            .footer,
+            .live-label,
+            .intro {
+                display: none !important
+            }
+
+            main {
+                max-width: 100%;
+                padding: 0;
+                margin: 0
+            }
+
+            .workspace {
+                display: block
+            }
+
+            .results {
+                position: static;
+                display: block
+            }
+
+            .print-only {
+                display: block !important
+            }
+
+            .print-banner {
+                display: flex;
+                justify-content: space-between;
+                align-items: flex-end;
+                border-bottom: 2px solid #172840;
+                padding-bottom: 10px;
+                margin-bottom: 14px
+            }
+
+            .print-brand-title {
+                font-size: 1.35rem;
+                font-weight: 750;
+                color: #12233d;
+                letter-spacing: -.5px
+            }
+
+            .print-brand-title em {
+                font-style: normal;
+                color: #245ce5
+            }
+
+            .print-subtitle {
+                font-size: .8125rem;
+                color: #586a80;
+                margin: 2px 0 0
+            }
+
+            .print-meta {
+                text-align: right;
+                font-size: .75rem;
+                color: #586a80;
+                line-height: 1.5
+            }
+
+            .print-specs-grid {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 12px;
+                margin-bottom: 14px
+            }
+
+            .print-spec-box {
+                border: 1px solid #c5d1e1;
+                border-radius: 8px;
+                padding: 9px 12px;
+                background: #f9fbfe
+            }
+
+            .print-spec-box h3 {
+                font-size: .875rem;
+                margin-bottom: 6px;
+                color: #12233d;
+                border-bottom: 1px solid #dce4ef;
+                padding-bottom: 3px
+            }
+
+            .print-spec-table {
+                width: 100%;
+                border-collapse: collapse;
+                font-size: .8125rem
+            }
+
+            .print-spec-table td {
+                padding: 3px 0;
+                border-bottom: 1px dashed #edf1f7
+            }
+
+            .print-spec-table tr:last-child td {
+                border-bottom: 0
+            }
+
+            .print-spec-table td:last-child {
+                text-align: right;
+                font-weight: 600;
+                color: #172840
+            }
+
+            .result-main {
+                background: #12233d !important;
+                color: white !important;
+                border-radius: 10px;
+                padding: 16px 20px;
+                margin-bottom: 14px;
+                break-inside: avoid
+            }
+
+            .result-main h2 {
+                color: #d7e2f5
+            }
+
+            .result-main .big-count {
+                font-size: 3rem;
+                color: white
+            }
+
+            .status-pill {
+                border: 1px solid #8ba4cc;
+                color: white
+            }
+
+            .result-bottom strong {
+                color: white
+            }
+
+            .card {
+                border: 1px solid #c5d1e1;
+                border-radius: 10px;
+                padding: 16px;
+                box-shadow: none;
+                margin-bottom: 14px;
+                break-inside: avoid
+            }
+
+            .diagram {
+                background: white;
+                border: 1px solid #c5d1e1;
+                min-height: auto;
+                padding: 8px
+            }
+
+            .diagram svg {
+                max-height: 290px
+            }
+
+            .mini-stats {
+                border-top: 1px solid #c5d1e1;
+                margin-top: 12px;
+                padding-top: 10px
+            }
+
+            .comparison {
+                font-size: .8125rem
+            }
+
+            .notes {
+                border-top: 1px solid #c5d1e1;
+                padding-top: 10px;
+                margin-top: 12px;
+                font-size: .75rem
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <a class="skip" href="#workspace">ข้ามไปเครื่องคำนวณ</a>
+    <header>
+        <div class="bar">
+            <div class="brand"><span class="brand-icon" aria-hidden="true">◉</span><span>RollPack <em>Pro</em></span>
+            </div>
+            <div class="header-tools"><label for="units">หน่วย</label><select id="units" aria-label="ระบบหน่วย">
+                    <option value="metric">มม. / กก.</option>
+                    <option value="imperial">นิ้ว / ปอนด์</option>
+                </select><button id="copy-spec-btn-header" class="header-action-btn"
+                    title="คัดลอกสเปกและผลลัพธ์ทั้งหมด">📋 คัดลอกสเปก</button><button id="print-btn-header"
+                    class="header-action-btn" title="พิมพ์รายงานหรือบันทึก PDF">🖨️ พิมพ์</button><button
+                    id="help-button">วิธีใช้</button><button id="reset-button">↺ เริ่มใหม่</button></div>
+        </div>
+    </header>
+    <main id="workspace">
+        <div class="intro">
+            <div>
+                <h1>วางแผนบรรจุม้วนกระดาษ</h1>
+                <p class="muted">เลือกตู้ ใส่ขนาดม้วน แล้วดูจำนวนและผังการจัดวางได้ทันที</p>
+            </div><span class="live-label">คำนวณอัตโนมัติเมื่อแก้ไขข้อมูล</span>
+        </div>
+        <div class="workspace">
+            <div class="inputs">
+                <section class="card" aria-labelledby="container-title">
+                    <div class="section-title"><span class="step">1</span>
+                        <h2 id="container-title">เลือกตู้คอนเทนเนอร์</h2>
+                    </div>
+                    <div class="presets" id="presets"><button class="preset" data-preset="20gp"
+                            aria-pressed="true"><strong>20′ Standard</strong><span>ตู้แห้งทั่วไป</span></button><button
+                            class="preset" data-preset="40gp" aria-pressed="false"><strong>40′
+                                Standard</strong><span>ตู้แห้งทั่วไป</span></button><button class="preset"
+                            data-preset="40hc" aria-pressed="false"><strong>40′ High
+                                Cube</strong><span>ตู้ทรงสูง</span></button><button class="preset" data-preset="45hc"
+                            aria-pressed="false"><strong>45′ High Cube</strong><span>ตู้ทรงสูง</span></button><button
+                            class="preset custom" data-preset="custom" aria-pressed="false">＋ กำหนดขนาดเอง</button>
+                    </div>
+                    <p class="spec-summary" id="spec-summary"></p>
+                    <details id="container-details">
+                        <summary>ดู / แก้ไขขนาดภายในตู้</summary>
+                        <div class="fields" id="container-fields"></div>
+                        <p class="hint">ค่าเริ่มต้นเป็นตัวอย่างจากไฟล์เดิม ตรวจสอบขนาดและพิกัดของตู้จริงก่อนใช้งาน</p>
+                    </details>
+                </section>
+                <section class="card" aria-labelledby="roll-title">
+                    <div class="section-title"><span class="step">2</span>
+                        <h2 id="roll-title">ใส่ข้อมูลม้วนกระดาษ</h2>
+                    </div>
+                    <div class="samples"><span>ลองตัวอย่าง</span><button data-sample="standard">มาตรฐาน</button><button
+                            data-sample="jumbo">จัมโบ้</button></div>
+                    <div class="fields" id="roll-fields"></div>
+                    <p class="hint">หน้ากว้างม้วน = ความสูงเมื่อวางม้วนตั้งขึ้น</p>
+                    <div class="orientation">
+                        <p id="orientation-label">ทิศทางการวาง</p>
+                        <div class="seg" role="group" aria-labelledby="orientation-label"><button
+                                data-orientation="auto" aria-pressed="true"><span
+                                    aria-hidden="true">✧</span>อัตโนมัติ</button><button data-orientation="vertical"
+                                aria-pressed="false"><span aria-hidden="true">⊙</span>แนวตั้ง</button><button
+                                data-orientation="horizontal" aria-pressed="false"><span
+                                    aria-hidden="true">▤</span>แนวนอน</button></div>
+                        <p class="hint" id="orientation-help">เปรียบเทียบรูปแบบการวาง
+                            แล้วเลือกจำนวนมากที่สุดภายในพิกัดน้ำหนักที่ระบุ</p>
+                    </div>
+                    <details>
+                        <summary>ระยะเผื่อระหว่างม้วน</summary>
+                        <div id="clearance-field"></div>
+                        <p class="hint">เว้นระยะบนพื้นระหว่างม้วน รวมระยะครึ่งหนึ่งที่ผนังแต่ละด้าน
+                            ไม่รวมระยะเผื่อแนวตั้งหรืออุปกรณ์ยก</p>
+                    </details>
+                </section>
+            </div>
+            <section class="results" id="results" aria-labelledby="result-title">
+                <div class="results-header">
+                    <div class="section-title"><span class="step">3</span>
+                        <h2 id="result-title">ผลการคำนวณ</h2>
+                    </div>
+                    <div class="action-tools"><button type="button" id="copy-spec-btn" class="action-btn"
+                            title="คัดลอกรายละเอียดและผลการคำนวณทั้งหมด"><svg viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"
+                                aria-hidden="true">
+                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                            </svg><span class="btn-text">คัดลอกสเปก</span></button><button type="button" id="print-btn"
+                            class="action-btn" title="พิมพ์รายงานหรือบันทึกเป็น PDF"><svg viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"
+                                stroke-linejoin="round" aria-hidden="true">
+                                <polyline points="6 9 6 2 18 2 18 9"></polyline>
+                                <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2">
+                                </path>
+                                <rect x="6" y="14" width="12" height="8"></rect>
+                            </svg><span class="btn-text">พิมพ์</span></button></div>
+                </div>
+                <div id="print-sheet" class="print-only">
+                    <div class="print-banner">
+                        <div>
+                            <div class="print-brand-title">RollPack <em>Pro</em> · รายงานสรุปการวางแผนบรรจุม้วนกระดาษ
+                            </div>
+                            <p class="print-subtitle">ระบบคำนวณและจำลองการจัดวางม้วนกระดาษลงตู้คอนเทนเนอร์</p>
+                        </div>
+                        <div class="print-meta">
+                            <div id="print-date"></div>
+                            <div id="print-unit-label"></div>
+                        </div>
+                    </div>
+                    <div class="print-specs-grid">
+                        <div class="print-spec-box">
+                            <h3>ข้อมูลตู้คอนเทนเนอร์</h3>
+                            <table class="print-spec-table">
+                                <tbody>
+                                    <tr>
+                                        <td>ประเภทตู้</td>
+                                        <td id="print-container-name">—</td>
+                                    </tr>
+                                    <tr>
+                                        <td>ขนาดภายใน (ย × ก × ส)</td>
+                                        <td id="print-container-dims">—</td>
+                                    </tr>
+                                    <tr>
+                                        <td>ความสูงช่องประตู</td>
+                                        <td id="print-container-door">—</td>
+                                    </tr>
+                                    <tr>
+                                        <td>พิกัดน้ำหนักบรรทุกสุทธิ</td>
+                                        <td id="print-container-payload">—</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="print-spec-box">
+                            <h3>ข้อมูลม้วนกระดาษ</h3>
+                            <table class="print-spec-table">
+                                <tbody>
+                                    <tr>
+                                        <td>เส้นผ่านศูนย์กลาง (OD)</td>
+                                        <td id="print-roll-diameter">—</td>
+                                    </tr>
+                                    <tr>
+                                        <td>หน้ากว้างม้วน (ความสูงวางตั้ง)</td>
+                                        <td id="print-roll-height">—</td>
+                                    </tr>
+                                    <tr>
+                                        <td>น้ำหนักต่อม้วน</td>
+                                        <td id="print-roll-weight">—</td>
+                                    </tr>
+                                    <tr>
+                                        <td>ระยะเผื่อระหว่างม้วน</td>
+                                        <td id="print-roll-clearance">—</td>
+                                    </tr>
+                                    <tr>
+                                        <td>ทิศทางการวาง</td>
+                                        <td id="print-roll-orientation">—</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="result-main">
+                    <div class="result-top">
+                        <div>
+                            <h2>จำนวนภายในพิกัดน้ำหนัก</h2>
+                            <div class="count-line"><strong class="big-count num"
+                                    id="result-count">—</strong><span>ม้วน</span></div>
+                            <p class="result-detail" id="result-detail"></p>
+                        </div><span class="status-pill" id="limit-badge"></span>
+                    </div>
+                    <div class="result-bottom">
+                        <div><label>น้ำหนักม้วนรวม</label><strong class="num" id="total-weight">—</strong></div>
+                        <div><label>พิกัดน้ำหนักคงเหลือ</label><strong class="num" id="remaining-weight">—</strong>
+                        </div>
+                    </div>
+                    <div class="progress-row"><span>สัดส่วนการใช้พิกัดน้ำหนัก</span><span class="num"
+                            id="payload-percent">—</span></div><progress id="payload-progress" max="100" value="0"
+                        aria-label="สัดส่วนการใช้พิกัดน้ำหนัก"></progress>
+                </div>
+                <div id="notices" class="notice" hidden></div>
+                <div class="card">
+                    <div class="plan-header">
+                        <div>
+                            <h3>ผังการจัดวาง</h3>
+                            <p id="plan-subtitle">มุมมองด้านบน</p>
+                        </div>
+                        <div class="view-switch" role="group" aria-label="มุมมองผัง 2D"><button data-view="top"
+                                aria-pressed="true" aria-controls="diagram">ด้านบน</button><button data-view="side"
+                                aria-pressed="false" aria-controls="diagram">ด้านข้าง</button></div>
+                    </div>
+                    <div id="diagram" class="diagram"></div>
+                    <div class="plan-footer">
+                        <div class="legend"><span><i class="swatch"></i>ม้วนที่บรรจุ</span><span id="empty-legend"><i
+                                    class="swatch empty"></i>ตำแหน่งว่าง</span><span><i
+                                    class="swatch door"></i>ประตู</span></div>
+                        <div class="layers" id="layer-controls"><span>ชั้น</span><button id="layer-prev"
+                                aria-label="ดูชั้นก่อนหน้า">‹</button><span class="num" id="layer-label"></span><button
+                                id="layer-next" aria-label="ดูชั้นถัดไป">›</button></div>
+                    </div>
+                    <div id="side-summary" class="side-summary" hidden></div>
+                    <p id="side-note" class="hint" hidden></p>
+                    <div class="mini-stats">
+                        <div><span>ความจุต่อชั้น</span><strong id="per-layer" class="num">—</strong></div>
+                        <div><span>ชั้นที่ใช้จริง</span><strong id="used-layers" class="num">—</strong></div>
+                        <div><span>ความจุตามขนาด*</span><strong id="physical-count" class="num">—</strong></div>
+                    </div>
+                    <p class="hint">*ความจุของรูปแบบที่เลือกก่อนจำกัดน้ำหนัก ไม่ใช่จำนวนที่ควรบรรจุ</p>
+                    <details id="comparison-details">
+                        <summary>เปรียบเทียบรูปแบบการวาง</summary>
+                        <div class="table-scroll">
+                            <table class="comparison">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">รูปแบบ</th>
+                                        <th scope="col">ตามขนาด</th>
+                                        <th scope="col">ภายในพิกัด</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="comparison-body"></tbody>
+                            </table>
+                        </div>
+                        <p class="hint">เมื่อจำนวนเท่ากัน เลือกแบบที่ใช้ชั้นน้อยกว่า เปรียบเทียบเฉพาะรูปแบบที่คำนวณได้
+                        </p>
+                    </details>
+                </div>
+                <div class="notes">
+                    <p>ผลเป็นการประมาณจากขนาดและน้ำหนักม้วนชนิดเดียว ไม่รวมวัสดุรองและรัดตรึง
+                        และไม่ใช่การรับรองความปลอดภัยหรือข้อกฎหมาย</p>
+                    <p>ก่อนโหลดจริง ให้ผู้รับผิดชอบตรวจสอบการกระจายน้ำหนัก การรับแรงซ้อน ช่องประตู และวิธีการยก
+                        โดยเฉพาะการวางนอนและการวางซ้อน</p>
+                </div>
+            </section>
+        </div>
+        <div class="footer"><span>RollPack Pro ·
+                เครื่องมือวางแผนเบื้องต้น</span><span>ขนาดภายในตู้และพิกัดสามารถแก้ไขได้</span></div>
+    </main>
+    <div class="mobile-result"><span id="mobile-summary">ผลการคำนวณ</span><button class="primary"
+            id="jump-results">ดูผังและผลลัพธ์ ↓</button></div>
+    <div class="sr-only" id="live-result" role="status" aria-live="polite" aria-atomic="true"></div>
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+    <dialog id="reset-dialog" aria-labelledby="reset-title">
+        <h2 id="reset-title">เริ่มคำนวณใหม่?</h2>
+        <p>กลับไปใช้ตู้ 20 ฟุต ม้วนมาตรฐาน และหน่วยมิลลิเมตร / กิโลกรัม ข้อมูลที่กำลังกรอกจะถูกแทนที่</p>
+        <div class="actions"><button data-close="reset-dialog" autofocus>กรอกต่อ</button><button class="primary"
+                id="confirm-reset">เริ่มใหม่</button></div>
+    </dialog>
+    <dialog id="help-dialog" aria-labelledby="help-title">
+        <h2 id="help-title">คำนวณได้ใน 3 ขั้นตอน</h2>
+        <p><strong>1. เลือกตู้</strong> ใช้ขนาดตัวอย่าง หรือเปิด “ดู / แก้ไขขนาดภายในตู้” เพื่อใส่ข้อมูลตู้จริง</p>
+        <p><strong>2. ใส่ข้อมูลม้วน</strong> ระบุเส้นผ่านศูนย์กลาง หน้ากว้าง และน้ำหนักต่อม้วน ให้ตรงกับหน่วยที่เลือก
+        </p>
+        <p><strong>3. ดูผลและผัง</strong> จำนวนหลักถูกจำกัดด้วยพิกัดน้ำหนักที่กรอก เลือก “ด้านบน” แล้วกดลูกศรข้าง “ชั้น”
+            เพื่อดูแต่ละชั้น หรือเลือก “ด้านข้าง” เพื่อดูความสูงรวมและระดับช่องประตู</p>
+        <p>ใช้บนมือถือได้โดยเปิดลิงก์นี้ในเบราว์เซอร์ และเพิ่มไปยังหน้าจอหลักจากเมนูของเบราว์เซอร์ได้หากรองรับ</p>
+        <button id="install-button" class="primary" hidden>ติดตั้งบนอุปกรณ์นี้</button>
+        <div class="actions"><button data-close="help-dialog" class="primary" autofocus>เข้าใจแล้ว</button></div>
+    </dialog>
+    <script src="./app.js"></script>
+</body>
+
+</html>
