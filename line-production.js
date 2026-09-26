@@ -661,6 +661,12 @@ function renderStep3Results() {
 
     // 4. Work Order Table
     renderWorkOrderTable(plan);
+
+    // 5. Mobile Sticky Bar Summary
+    const mobileSum = $('mobile-summary');
+    if (mobileSum) {
+        mobileSum.textContent = `${machTitle} · ${fmt(plan.totalSets)} ${setUnit} · Trim ${fmt(plan.overallTrimPercent, 1)}%`;
+    }
 }
 
 function renderNoSolution() {
@@ -679,6 +685,11 @@ function renderNoSolution() {
     $('diagram-area').innerHTML = `<div class="empty-diagram">${lang === 'zh' ? '无兼容的分切组合' : 'ไม่มีชุดการตัดที่เข้ากันได้'}</div>`;
     $('comparison-tbody').innerHTML = '';
     $('workorder-tbody').innerHTML = '';
+
+    const mobileSum = $('mobile-summary');
+    if (mobileSum) {
+        mobileSum.textContent = lang === 'zh' ? '暂无可排产方案' : 'ไม่มีแผนที่รองรับ';
+    }
 }
 
 function renderDiagramAndControls(plan) {
@@ -1006,6 +1017,13 @@ function initEventHandlers() {
             currentStrategy = 'recommended';
             renderAll();
             showToast(t('toast.reset_success', null, getLang() === 'zh' ? '已恢复初始默认数据' : 'รีเซ็ตข้อมูลเริ่มต้นเรียบร้อยแล้ว'));
+        }
+    });
+
+    $('jump-results')?.addEventListener('click', () => {
+        const resultsEl = $('results') || $('results-section');
+        if (resultsEl) {
+            resultsEl.scrollIntoView({ behavior: 'smooth' });
         }
     });
 

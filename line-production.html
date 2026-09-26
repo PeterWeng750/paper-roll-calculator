@@ -1200,8 +1200,12 @@
             opacity: 1;
         }
 
-        /* Responsive */
-        @media(max-width:900px) {
+        .mobile-result {
+            display: none;
+        }
+
+        /* Responsive Breakpoints */
+        @media (max-width: 900px) {
             header .bar {
                 padding: 12px 16px;
                 flex-wrap: wrap;
@@ -1217,16 +1221,17 @@
             .nav-tab {
                 flex: 1;
                 justify-content: center;
-                padding: 8px 10px;
+                padding: 9px 10px;
                 font-size: .8125rem;
             }
 
             main {
-                padding: 20px 16px 90px;
+                padding: 20px 16px 95px;
             }
 
             .workspace {
                 grid-template-columns: 1fr;
+                gap: 20px;
             }
 
             .card {
@@ -1238,7 +1243,241 @@
             }
 
             .big-count {
-                font-size: 2.6rem;
+                font-size: 2.7rem;
+            }
+        }
+
+        @media (max-width: 680px) {
+            .intro {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+                margin-bottom: 16px;
+            }
+
+            .intro h1 {
+                font-size: 1.3rem;
+                line-height: 1.25;
+            }
+
+            .intro .muted {
+                font-size: .85rem;
+            }
+
+            .live-label {
+                align-self: flex-start;
+                font-size: .75rem;
+            }
+
+            /* Compact icon-only header buttons on mobile */
+            .header-action-btn span {
+                display: none;
+            }
+
+            .header-action-btn {
+                padding: 8px 10px;
+                min-width: 40px;
+                min-height: 40px;
+                justify-content: center;
+            }
+
+            .header-tools {
+                gap: 6px;
+            }
+
+            .action-tools {
+                width: 100%;
+                display: flex;
+                gap: 8px;
+            }
+
+            .action-btn {
+                flex: 1;
+                justify-content: center;
+            }
+
+            /* Segmented Strategy Options on Mobile */
+            .seg {
+                flex-direction: column;
+                gap: 6px;
+            }
+
+            .seg button {
+                flex-direction: row;
+                align-items: center;
+                justify-content: flex-start;
+                text-align: left;
+                padding: 10px 14px;
+                gap: 10px;
+            }
+
+            .seg button span.seg-icon {
+                font-size: 1.15rem;
+                margin-bottom: 0;
+            }
+
+            /* Result Main Card */
+            .result-main {
+                padding: 18px 16px;
+            }
+
+            .result-top {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+
+            .big-count {
+                font-size: 2.3rem;
+            }
+
+            /* Slitting Diagram */
+            .plan-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+
+            .view-switch {
+                width: 100%;
+            }
+
+            .view-switch button {
+                flex: 1;
+                text-align: center;
+            }
+
+            .plan-footer {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 12px;
+            }
+
+            .layers {
+                justify-content: center;
+                width: 100%;
+            }
+
+            .legend {
+                flex-wrap: wrap;
+                gap: 8px 12px;
+            }
+
+            .mini-stats {
+                grid-template-columns: 1fr;
+                gap: 8px;
+            }
+
+            /* Mobile Result Sticky Bar */
+            .mobile-result {
+                display: flex;
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                z-index: 10;
+                background: rgba(255, 255, 255, 0.95);
+                backdrop-filter: blur(10px);
+                -webkit-backdrop-filter: blur(10px);
+                border-top: 1px solid var(--line);
+                padding: 10px 16px max(10px, env(safe-area-inset-bottom));
+                align-items: center;
+                justify-content: space-between;
+                gap: 12px;
+                box-shadow: 0 -4px 16px rgba(18, 35, 61, 0.08);
+            }
+
+            .mobile-result span {
+                font-size: .875rem;
+                font-weight: 600;
+                color: var(--ink);
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
+            .mobile-result button {
+                min-width: 135px;
+                min-height: 40px;
+                flex-shrink: 0;
+                font-size: .875rem;
+                padding: 8px 14px;
+            }
+
+            .footer {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+                gap: 4px;
+            }
+        }
+
+        @media (max-width: 440px) {
+            main {
+                padding: 14px 12px 95px;
+            }
+
+            .card {
+                padding: 16px 12px;
+                border-radius: 14px;
+            }
+
+            .presets {
+                grid-template-columns: 1fr;
+                gap: 8px;
+            }
+
+            .preset {
+                padding: 12px 14px;
+                min-height: auto;
+            }
+
+            .preset-header {
+                margin-bottom: 4px;
+            }
+
+            .preset-name {
+                font-size: 1.05rem;
+            }
+
+            .preset-range-val {
+                font-size: .95rem;
+            }
+
+            .slit-roll .roll-name {
+                display: none;
+            }
+
+            .slit-roll .roll-w {
+                font-size: .75rem;
+            }
+
+            .trim-waste {
+                font-size: .625rem;
+                padding: 0 3px;
+            }
+
+            .result-bottom {
+                grid-template-columns: 1fr 1fr;
+                gap: 10px 8px;
+            }
+
+            .result-bottom strong {
+                font-size: 1.1rem;
+            }
+
+            .orders-table th, 
+            .orders-table td {
+                padding: 6px 4px;
+            }
+
+            .mini-input {
+                padding: 4px 6px;
+                font-size: .8125rem;
+            }
+
+            .del-order-btn {
+                padding: 6px;
             }
         }
 
@@ -1614,6 +1853,12 @@ CA	1050	70"></textarea>
             <span data-i18n="line.footer.2">สเปกเครื่องจักรและรายการออเดอร์สามารถปรับเปลี่ยนได้ตามจริง</span>
         </div>
     </main>
+
+    <!-- Mobile Quick Result Sticky Bar -->
+    <div class="mobile-result" id="mobile-result-bar">
+        <span id="mobile-summary">กำลังคำนวณ...</span>
+        <button type="button" class="primary" id="jump-results" data-i18n="line.mobile.jump">ดูผังและผลลัพธ์ ↓</button>
+    </div>
 
     <!-- Toast Notification -->
     <div id="toast" class="toast" role="status" aria-live="polite"></div>
