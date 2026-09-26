@@ -299,6 +299,62 @@
             color: #bdcbe0
         }
 
+        /* Language Switcher */
+        .lang-switch {
+            display: inline-flex;
+            align-items: center;
+            background: #ffffff14;
+            border: 1px solid #ffffff28;
+            border-radius: 9px;
+            padding: 3px;
+            gap: 2px;
+            flex-shrink: 0;
+        }
+
+        .lang-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 5px 9px;
+            border: none;
+            background: transparent;
+            color: #cad8ee;
+            border-radius: 6px;
+            font-size: .8125rem;
+            font-weight: 600;
+            min-height: 36px;
+            cursor: pointer;
+            transition: all .15s ease;
+            white-space: nowrap;
+        }
+
+        .lang-btn:hover {
+            color: white;
+            background: #ffffff1c;
+        }
+
+        .lang-btn.active {
+            background: var(--blue);
+            color: white;
+            box-shadow: 0 1px 6px rgba(36, 92, 229, .5);
+        }
+
+        .lang-flag {
+            font-size: 1.15rem;
+            line-height: 1;
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        @media(max-width: 600px) {
+            .lang-name {
+                display: none;
+            }
+            .lang-btn {
+                padding: 6px 8px;
+            }
+        }
+
         main {
             max-width: 1440px;
             margin: auto;
@@ -1485,8 +1541,8 @@
     </style>
 </head>
 
-<body>
-    <a class="skip" href="#workspace">ข้ามไปเครื่องคำนวณ</a>
+<body data-page-title-key="app.title.index">
+    <a class="skip" href="#workspace" data-i18n="skip.calculator">ข้ามไปเครื่องคำนวณ</a>
     <header>
         <div class="bar">
             <div class="brand"><span class="brand-icon" aria-hidden="true">◉</span><span>RollPack <em>Pro</em></span>
@@ -1494,75 +1550,86 @@
             <nav class="nav-tabs" aria-label="การเลือกหน้าคำนวณ">
                 <a href="index.html" class="nav-tab active" aria-current="page">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"></path><path d="m3.3 7 8.7 5 8.7-5"></path><path d="M12 22V12"></path></svg>
-                    <span>จัดเรียงตู้คอนเทนเนอร์</span>
+                    <span data-i18n="nav.container">จัดเรียงตู้คอนเทนเนอร์</span>
                 </a>
                 <a href="line-production.html" class="nav-tab">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 20a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8l-6 4V8l-6 4V4H2Z"></path><path d="M17 18h1"></path><path d="M12 18h1"></path><path d="M7 18h1"></path></svg>
-                    <span>คำนวณไลน์ผลิต</span>
-                    <span class="nav-tab-badge">ใหม่</span>
+                    <span data-i18n="nav.line">คำนวณไลน์ผลิต</span>
+                    <span class="nav-tab-badge" data-i18n="nav.badge.new">ใหม่</span>
                 </a>
             </nav>
-            <div class="header-tools"><label for="units">หน่วย</label><select id="units" aria-label="ระบบหน่วย">
-                    <option value="metric">มม. / กก.</option>
-                    <option value="imperial">นิ้ว / ปอนด์</option>
+            <div class="header-tools">
+                <div class="lang-switch" role="group" aria-label="Language selection / 语言选择">
+                    <button type="button" class="lang-btn active" data-lang="th" title="ภาษาไทย">
+                        <span class="lang-flag" aria-hidden="true">🇹🇭</span>
+                        <span class="lang-name">ไทย</span>
+                    </button>
+                    <button type="button" class="lang-btn" data-lang="zh" title="中文 (简体)">
+                        <span class="lang-flag" aria-hidden="true">🇨🇳</span>
+                        <span class="lang-name">中文</span>
+                    </button>
+                </div>
+                <label for="units" data-i18n="header.units">หน่วย</label><select id="units" aria-label="ระบบหน่วย">
+                    <option value="metric" data-i18n="header.units.metric">มม. / กก.</option>
+                    <option value="imperial" data-i18n="header.units.imperial">นิ้ว / ปอนด์</option>
                 </select><button id="copy-spec-btn-header" class="header-action-btn"
-                    title="คัดลอกสเปกและผลลัพธ์ทั้งหมด"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><span>คัดลอกสเปก</span></button><button id="print-btn-header"
-                    class="header-action-btn" title="พิมพ์รายงานหรือบันทึก PDF"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg><span>พิมพ์</span></button><button
-                    id="help-button" class="header-action-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg><span>วิธีใช้</span></button><button id="reset-button" class="header-action-btn" title="ล้างข้อมูลและเริ่มใหม่"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path></svg><span>เริ่มใหม่</span></button></div>
+                    data-i18n-title="header.copy_spec.title" title="คัดลอกสเปกและผลลัพธ์ทั้งหมด"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><span data-i18n="header.copy_spec">คัดลอกสเปก</span></button><button id="print-btn-header"
+                    class="header-action-btn" data-i18n-title="header.print.title" title="พิมพ์รายงานหรือบันทึก PDF"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg><span data-i18n="header.print">พิมพ์</span></button><button
+                    id="help-button" class="header-action-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg><span data-i18n="header.help">วิธีใช้</span></button><button id="reset-button" class="header-action-btn" data-i18n-title="header.reset.title" title="ล้างข้อมูลและเริ่มใหม่"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path></svg><span data-i18n="header.reset">เริ่มใหม่</span></button></div>
         </div>
     </header>
     <main id="workspace">
         <div class="intro">
             <div>
-                <h1>วางแผนบรรจุม้วนกระดาษ</h1>
-                <p class="muted">เลือกตู้ ใส่ขนาดม้วน แล้วดูจำนวนและผังการจัดวางได้ทันที</p>
-            </div><span class="live-label">คำนวณอัตโนมัติเมื่อแก้ไขข้อมูล</span>
+                <h1 data-i18n="container.intro.title">วางแผนบรรจุม้วนกระดาษ</h1>
+                <p class="muted" data-i18n="container.intro.desc">เลือกตู้ ใส่ขนาดม้วน แล้วดูจำนวนและผังการจัดวางได้ทันที</p>
+            </div><span class="live-label" data-i18n="container.intro.live">คำนวณอัตโนมัติเมื่อแก้ไขข้อมูล</span>
         </div>
         <div class="workspace">
             <div class="inputs">
                 <section class="card" aria-labelledby="container-title">
                     <div class="section-title"><span class="step">1</span>
-                        <h2 id="container-title">เลือกตู้คอนเทนเนอร์</h2>
+                        <h2 id="container-title" data-i18n="container.step1.title">เลือกตู้คอนเทนเนอร์</h2>
                     </div>
                     <div class="presets" id="presets"><button class="preset" data-preset="20gp"
-                            aria-pressed="true"><strong>20′ Standard</strong><span>ตู้แห้งทั่วไป</span></button><button
+                            aria-pressed="true"><strong>20′ Standard</strong><span data-i18n="container.preset.gp">ตู้แห้งทั่วไป</span></button><button
                             class="preset" data-preset="40gp" aria-pressed="false"><strong>40′
-                                Standard</strong><span>ตู้แห้งทั่วไป</span></button><button class="preset"
+                                Standard</strong><span data-i18n="container.preset.gp">ตู้แห้งทั่วไป</span></button><button class="preset"
                             data-preset="40hc" aria-pressed="false"><strong>40′ High
-                                Cube</strong><span>ตู้ทรงสูง</span></button><button class="preset" data-preset="45hc"
-                            aria-pressed="false"><strong>45′ High Cube</strong><span>ตู้ทรงสูง</span></button><button
-                            class="preset custom" data-preset="custom" aria-pressed="false">＋ กำหนดขนาดเอง</button>
+                                Cube</strong><span data-i18n="container.preset.hc">ตู้ทรงสูง</span></button><button class="preset" data-preset="45hc"
+                            aria-pressed="false"><strong>45′ High Cube</strong><span data-i18n="container.preset.hc">ตู้ทรงสูง</span></button><button
+                            class="preset custom" data-preset="custom" aria-pressed="false" data-i18n="container.preset.custom">＋ กำหนดขนาดเอง</button>
                     </div>
                     <p class="spec-summary" id="spec-summary"></p>
                     <details id="container-details">
-                        <summary>ดู / แก้ไขขนาดภายในตู้</summary>
+                        <summary data-i18n="container.step1.details">ดู / แก้ไขขนาดภายในตู้</summary>
                         <div class="fields" id="container-fields"></div>
-                        <p class="hint">ค่าเริ่มต้นเป็นตัวอย่างจากไฟล์เดิม ตรวจสอบขนาดและพิกัดของตู้จริงก่อนใช้งาน</p>
+                        <p class="hint" data-i18n="container.step1.hint">ค่าเริ่มต้นเป็นตัวอย่างจากไฟล์เดิม ตรวจสอบขนาดและพิกัดของตู้จริงก่อนใช้งาน</p>
                     </details>
                 </section>
                 <section class="card" aria-labelledby="roll-title">
                     <div class="section-title"><span class="step">2</span>
-                        <h2 id="roll-title">ใส่ข้อมูลม้วนกระดาษ</h2>
+                        <h2 id="roll-title" data-i18n="container.step2.title">ใส่ข้อมูลม้วนกระดาษ</h2>
                     </div>
-                    <div class="samples"><span>ลองตัวอย่าง</span><button data-sample="standard">มาตรฐาน</button><button
-                            data-sample="jumbo">จัมโบ้</button></div>
+                    <div class="samples"><span data-i18n="container.step2.samples">ลองตัวอย่างสเปกยอดนิยม:</span><button data-sample="standard" data-i18n="container.sample.standard">มาตรฐาน</button><button
+                            data-sample="jumbo" data-i18n="container.sample.jumbo">จัมโบ้</button></div>
                     <div class="fields" id="roll-fields"></div>
-                    <p class="hint">หน้ากว้างม้วน = ความสูงเมื่อวางม้วนตั้งขึ้น</p>
+                    <p class="hint" data-i18n="container.step2.roll_height_hint">หน้ากว้างม้วน = ความสูงเมื่อวางม้วนตั้งขึ้น</p>
                     <div class="orientation">
-                        <p id="orientation-label">ทิศทางการวาง</p>
+                        <p id="orientation-label" data-i18n="container.step2.orient_label">ทิศทางการวาง</p>
                         <div class="seg" role="group" aria-labelledby="orientation-label"><button
                                 data-orientation="auto" aria-pressed="true"><span
-                                    aria-hidden="true">✧</span>อัตโนมัติ</button><button data-orientation="vertical"
-                                aria-pressed="false"><span aria-hidden="true">⊙</span>แนวตั้ง</button><button
+                                    aria-hidden="true">✧</span><span data-i18n="container.step2.orient_auto_short">อัตโนมัติ</span></button><button data-orientation="vertical"
+                                aria-pressed="false"><span aria-hidden="true">⊙</span><span data-i18n="container.step2.orient_vert_short">แนวตั้ง</span></button><button
                                 data-orientation="horizontal" aria-pressed="false"><span
-                                    aria-hidden="true">▤</span>แนวนอน</button></div>
+                                    aria-hidden="true">▤</span><span data-i18n="container.step2.orient_horiz_short">แนวนอน</span></button></div>
                         <p class="hint" id="orientation-help">เปรียบเทียบรูปแบบการวาง
                             แล้วเลือกจำนวนมากที่สุดภายในพิกัดน้ำหนักที่ระบุ</p>
                     </div>
                     <details>
-                        <summary>ระยะเผื่อระหว่างม้วน</summary>
+                        <summary data-i18n="container.step2.clearance_title">ระยะเผื่อระหว่างม้วน</summary>
                         <div id="clearance-field"></div>
-                        <p class="hint">เว้นระยะบนพื้นระหว่างม้วน รวมระยะครึ่งหนึ่งที่ผนังแต่ละด้าน
+                        <p class="hint" data-i18n="container.step2.clearance_hint">เว้นระยะบนพื้นระหว่างม้วน รวมระยะครึ่งหนึ่งที่ผนังแต่ละด้าน
                             ไม่รวมระยะเผื่อแนวตั้งหรืออุปกรณ์ยก</p>
                     </details>
                 </section>
@@ -1570,23 +1637,23 @@
             <section class="results" id="results" aria-labelledby="result-title">
                 <div class="results-header">
                     <div class="section-title"><span class="step">3</span>
-                        <h2 id="result-title">ผลการคำนวณ</h2>
+                        <h2 id="result-title" data-i18n="container.step3.title">ผลการคำนวณและผังการจัดเรียง</h2>
                     </div>
                     <div class="action-tools"><button type="button" id="copy-spec-btn" class="action-btn"
-                            title="คัดลอกรายละเอียดและผลการคำนวณทั้งหมด"><svg viewBox="0 0 24 24" fill="none"
+                            data-i18n-title="header.copy_spec.title" title="คัดลอกรายละเอียดและผลการคำนวณทั้งหมด"><svg viewBox="0 0 24 24" fill="none"
                                 stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"
                                 aria-hidden="true">
                                 <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
                                 <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-                            </svg><span class="btn-text">คัดลอกสเปก</span></button><button type="button" id="print-btn"
-                            class="action-btn" title="พิมพ์รายงานหรือบันทึกเป็น PDF"><svg viewBox="0 0 24 24"
+                            </svg><span class="btn-text" data-i18n="header.copy_spec">คัดลอกสเปก</span></button><button type="button" id="print-btn"
+                            class="action-btn" data-i18n-title="header.print.title" title="พิมพ์รายงานหรือบันทึกเป็น PDF"><svg viewBox="0 0 24 24"
                                 fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"
                                 stroke-linejoin="round" aria-hidden="true">
                                 <polyline points="6 9 6 2 18 2 18 9"></polyline>
                                 <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2">
                                 </path>
                                 <rect x="6" y="14" width="12" height="8"></rect>
-                            </svg><span class="btn-text">พิมพ์</span></button></div>
+                            </svg><span class="btn-text" data-i18n="header.print">พิมพ์</span></button></div>
                 </div>
                 <div id="print-sheet" class="print-only">
                     <div class="print-banner">
@@ -1656,18 +1723,18 @@
                 <div class="result-main">
                     <div class="result-top">
                         <div>
-                            <h2>จำนวนภายในพิกัดน้ำหนัก</h2>
+                            <h2 data-i18n="container.step3.max_rolls">จำนวนภายในพิกัดน้ำหนัก</h2>
                             <div class="count-line"><strong class="big-count num"
-                                    id="result-count">—</strong><span>ม้วน</span></div>
+                                    id="result-count">—</strong><span data-i18n="container.step3.rolls_unit">ม้วน</span></div>
                             <p class="result-detail" id="result-detail"></p>
                         </div><span class="status-pill" id="limit-badge"></span>
                     </div>
                     <div class="result-bottom">
-                        <div><label>น้ำหนักม้วนรวม</label><strong class="num" id="total-weight">—</strong></div>
-                        <div><label>พิกัดน้ำหนักคงเหลือ</label><strong class="num" id="remaining-weight">—</strong>
+                        <div><label data-i18n="container.step3.total_weight">น้ำหนักม้วนรวม</label><strong class="num" id="total-weight">—</strong></div>
+                        <div><label data-i18n="container.step3.remaining_weight">พิกัดน้ำหนักคงเหลือ</label><strong class="num" id="remaining-weight">—</strong>
                         </div>
                     </div>
-                    <div class="progress-row"><span>สัดส่วนการใช้พิกัดน้ำหนัก</span><span class="num"
+                    <div class="progress-row"><span data-i18n="container.step3.payload_pct">สัดส่วนการใช้พิกัดน้ำหนัก</span><span class="num"
                             id="payload-percent">—</span></div><progress id="payload-progress" max="100" value="0"
                         aria-label="สัดส่วนการใช้พิกัดน้ำหนัก"></progress>
                 </div>
@@ -1675,80 +1742,81 @@
                 <div class="card">
                     <div class="plan-header">
                         <div>
-                            <h3>ผังการจัดวาง</h3>
+                            <h3 data-i18n="container.step3.plan_title">ผังการจัดวาง</h3>
                             <p id="plan-subtitle">มุมมองด้านบน</p>
                         </div>
                         <div class="view-switch" role="group" aria-label="มุมมองผัง 2D"><button data-view="top"
-                                aria-pressed="true" aria-controls="diagram">ด้านบน</button><button data-view="side"
-                                aria-pressed="false" aria-controls="diagram">ด้านข้าง</button></div>
+                                aria-pressed="true" aria-controls="diagram" data-i18n="container.step3.view_top_btn">ด้านบน</button><button data-view="side"
+                                aria-pressed="false" aria-controls="diagram" data-i18n="container.step3.view_side_btn">ด้านข้าง</button></div>
                     </div>
                     <div id="diagram" class="diagram"></div>
                     <div class="plan-footer">
-                        <div class="legend"><span><i class="swatch"></i>ม้วนที่บรรจุ</span><span id="empty-legend"><i
-                                    class="swatch empty"></i>ตำแหน่งว่าง</span><span><i
-                                    class="swatch door"></i>ประตู</span></div>
-                        <div class="layers" id="layer-controls"><span>ชั้น</span><button id="layer-prev"
+                        <div class="legend"><span><i class="swatch"></i><span data-i18n="container.step3.legend_loaded">ม้วนที่บรรจุ</span></span><span id="empty-legend"><i
+                                    class="swatch empty"></i><span data-i18n="container.step3.legend_empty">ตำแหน่งว่าง</span></span><span><i
+                                    class="swatch door"></i><span data-i18n="container.step3.legend_door">ประตู</span></span></div>
+                        <div class="layers" id="layer-controls"><span data-i18n="container.step3.layer_label">ชั้น</span><button id="layer-prev"
                                 aria-label="ดูชั้นก่อนหน้า">‹</button><span class="num" id="layer-label"></span><button
                                 id="layer-next" aria-label="ดูชั้นถัดไป">›</button></div>
                     </div>
                     <div id="side-summary" class="side-summary" hidden></div>
                     <p id="side-note" class="hint" hidden></p>
                     <div class="mini-stats">
-                        <div><span>ความจุต่อชั้น</span><strong id="per-layer" class="num">—</strong></div>
-                        <div><span>ชั้นที่ใช้จริง</span><strong id="used-layers" class="num">—</strong></div>
-                        <div><span>ความจุตามขนาด*</span><strong id="physical-count" class="num">—</strong></div>
+                        <div><span data-i18n="container.step3.per_layer">ความจุต่อชั้น</span><strong id="per-layer" class="num">—</strong></div>
+                        <div><span data-i18n="container.step3.used_layers">ชั้นที่ใช้จริง</span><strong id="used-layers" class="num">—</strong></div>
+                        <div><span data-i18n="container.step3.physical_count">ความจุตามขนาด*</span><strong id="physical-count" class="num">—</strong></div>
                     </div>
-                    <p class="hint">*ความจุของรูปแบบที่เลือกก่อนจำกัดน้ำหนัก ไม่ใช่จำนวนที่ควรบรรจุ</p>
+                    <p class="hint" data-i18n="container.step3.physical_hint">*ความจุของรูปแบบที่เลือกก่อนจำกัดน้ำหนัก ไม่ใช่จำนวนที่ควรบรรจุ</p>
                     <details id="comparison-details">
-                        <summary>เปรียบเทียบรูปแบบการวาง</summary>
+                        <summary data-i18n="container.step3.compare_title">เปรียบเทียบรูปแบบการจัดวาง</summary>
                         <div class="table-scroll">
                             <table class="comparison">
                                 <thead>
                                     <tr>
-                                        <th scope="col">รูปแบบ</th>
-                                        <th scope="col">ตามขนาด</th>
-                                        <th scope="col">ภายในพิกัด</th>
+                                        <th scope="col" data-i18n="container.step3.th_pattern">รูปแบบการวาง</th>
+                                        <th scope="col" data-i18n="container.step3.th_geom">ตามพื้นที่ตู้</th>
+                                        <th scope="col" data-i18n="container.step3.th_payload_cap">ตามพิกัดน้ำหนัก</th>
                                     </tr>
                                 </thead>
                                 <tbody id="comparison-body"></tbody>
                             </table>
                         </div>
-                        <p class="hint">เมื่อจำนวนเท่ากัน เลือกแบบที่ใช้ชั้นน้อยกว่า เปรียบเทียบเฉพาะรูปแบบที่คำนวณได้
+                        <p class="hint" data-i18n="container.step3.compare_hint">เมื่อจำนวนเท่ากัน เลือกแบบที่ใช้ชั้นน้อยกว่า เปรียบเทียบเฉพาะรูปแบบที่คำนวณได้
                         </p>
                     </details>
                 </div>
                 <div class="notes">
-                    <p>ผลเป็นการประมาณจากขนาดและน้ำหนักม้วนชนิดเดียว ไม่รวมวัสดุรองและรัดตรึง
+                    <p data-i18n="container.notes.1">ผลเป็นการประมาณจากขนาดและน้ำหนักม้วนชนิดเดียว ไม่รวมวัสดุรองและรัดตรึง
                         และไม่ใช่การรับรองความปลอดภัยหรือข้อกฎหมาย</p>
-                    <p>ก่อนโหลดจริง ให้ผู้รับผิดชอบตรวจสอบการกระจายน้ำหนัก การรับแรงซ้อน ช่องประตู และวิธีการยก
+                    <p data-i18n="container.notes.2">ก่อนโหลดจริง ให้ผู้รับผิดชอบตรวจสอบการกระจายน้ำหนัก การรับแรงซ้อน ช่องประตู และวิธีการยก
                         โดยเฉพาะการวางนอนและการวางซ้อน</p>
                 </div>
             </section>
         </div>
-        <div class="footer"><span>RollPack Pro ·
-                เครื่องมือวางแผนเบื้องต้น</span><span>ขนาดภายในตู้และพิกัดสามารถแก้ไขได้</span></div>
+        <div class="footer"><span data-i18n="container.footer.1">RollPack Pro ·
+                เครื่องมือวางแผนเบื้องต้น</span><span data-i18n="container.footer.2">ขนาดภายในตู้และพิกัดสามารถแก้ไขได้</span></div>
     </main>
     <div class="mobile-result"><span id="mobile-summary">ผลการคำนวณ</span><button class="primary"
-            id="jump-results">ดูผังและผลลัพธ์ ↓</button></div>
+            id="jump-results" data-i18n="container.mobile.jump">ดูผังและผลลัพธ์ ↓</button></div>
     <div class="sr-only" id="live-result" role="status" aria-live="polite" aria-atomic="true"></div>
     <div id="toast" class="toast" role="status" aria-live="polite"></div>
     <dialog id="reset-dialog" aria-labelledby="reset-title">
-        <h2 id="reset-title">เริ่มคำนวณใหม่?</h2>
-        <p>กลับไปใช้ตู้ 20 ฟุต ม้วนมาตรฐาน และหน่วยมิลลิเมตร / กิโลกรัม ข้อมูลที่กำลังกรอกจะถูกแทนที่</p>
-        <div class="actions"><button data-close="reset-dialog" autofocus>กรอกต่อ</button><button class="primary"
-                id="confirm-reset">เริ่มใหม่</button></div>
+        <h2 id="reset-title" data-i18n="container.reset.dialog_title">เริ่มคำนวณใหม่?</h2>
+        <p data-i18n="container.reset.desc">กลับไปใช้ตู้ 20 ฟุต ม้วนมาตรฐาน และหน่วยมิลลิเมตร / กิโลกรัม ข้อมูลที่กำลังกรอกจะถูกแทนที่</p>
+        <div class="actions"><button data-close="reset-dialog" autofocus data-i18n="container.reset.cancel">กรอกต่อ</button><button class="primary"
+                id="confirm-reset" data-i18n="container.reset.confirm">เริ่มใหม่</button></div>
     </dialog>
     <dialog id="help-dialog" aria-labelledby="help-title">
-        <h2 id="help-title">คำนวณได้ใน 3 ขั้นตอน</h2>
-        <p><strong>1. เลือกตู้</strong> ใช้ขนาดตัวอย่าง หรือเปิด “ดู / แก้ไขขนาดภายในตู้” เพื่อใส่ข้อมูลตู้จริง</p>
-        <p><strong>2. ใส่ข้อมูลม้วน</strong> ระบุเส้นผ่านศูนย์กลาง หน้ากว้าง และน้ำหนักต่อม้วน ให้ตรงกับหน่วยที่เลือก
+        <h2 id="help-title" data-i18n="container.help.dialog_title">คำนวณได้ใน 3 ขั้นตอน</h2>
+        <p data-i18n="container.help.step1"><strong>1. เลือกตู้</strong> ใช้ขนาดตัวอย่าง หรือเปิด “ดู / แก้ไขขนาดภายในตู้” เพื่อใส่ข้อมูลตู้จริง</p>
+        <p data-i18n="container.help.step2"><strong>2. ใส่ข้อมูลม้วน</strong> ระบุเส้นผ่านศูนย์กลาง หน้ากว้าง และน้ำหนักต่อม้วน ให้ตรงกับหน่วยที่เลือก
         </p>
-        <p><strong>3. ดูผลและผัง</strong> จำนวนหลักถูกจำกัดด้วยพิกัดน้ำหนักที่กรอก เลือก “ด้านบน” แล้วกดลูกศรข้าง “ชั้น”
+        <p data-i18n="container.help.step3"><strong>3. ดูผลและผัง</strong> จำนวนหลักถูกจำกัดด้วยพิกัดน้ำหนักที่กรอก เลือก “ด้านบน” แล้วกดลูกศรข้าง “ชั้น”
             เพื่อดูแต่ละชั้น หรือเลือก “ด้านข้าง” เพื่อดูความสูงรวมและระดับช่องประตู</p>
-        <p>ใช้บนมือถือได้โดยเปิดลิงก์นี้ในเบราว์เซอร์ และเพิ่มไปยังหน้าจอหลักจากเมนูของเบราว์เซอร์ได้หากรองรับ</p>
+        <p data-i18n="container.help.pwa">ใช้บนมือถือได้โดยเปิดลิงก์นี้ในเบราว์เซอร์ และเพิ่มไปยังหน้าจอหลักจากเมนูของเบราว์เซอร์ได้หากรองรับ</p>
         <button id="install-button" class="primary" hidden>ติดตั้งบนอุปกรณ์นี้</button>
-        <div class="actions"><button data-close="help-dialog" class="primary" autofocus>เข้าใจแล้ว</button></div>
+        <div class="actions"><button data-close="help-dialog" class="primary" autofocus data-i18n="container.help.close">เข้าใจแล้ว</button></div>
     </dialog>
+    <script src="./i18n.js"></script>
     <script src="./app.js"></script>
 </body>
 

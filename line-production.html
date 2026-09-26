@@ -272,6 +272,62 @@
             color: white;
         }
 
+        /* Language Switcher */
+        .lang-switch {
+            display: inline-flex;
+            align-items: center;
+            background: #ffffff14;
+            border: 1px solid #ffffff28;
+            border-radius: 9px;
+            padding: 3px;
+            gap: 2px;
+            flex-shrink: 0;
+        }
+
+        .lang-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 5px 9px;
+            border: none;
+            background: transparent;
+            color: #cad8ee;
+            border-radius: 6px;
+            font-size: .8125rem;
+            font-weight: 600;
+            min-height: 36px;
+            cursor: pointer;
+            transition: all .15s ease;
+            white-space: nowrap;
+        }
+
+        .lang-btn:hover {
+            color: white;
+            background: #ffffff1c;
+        }
+
+        .lang-btn.active {
+            background: var(--blue);
+            color: white;
+            box-shadow: 0 1px 6px rgba(36, 92, 229, .5);
+        }
+
+        .lang-flag {
+            font-size: 1.15rem;
+            line-height: 1;
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        @media(max-width: 600px) {
+            .lang-name {
+                display: none;
+            }
+            .lang-btn {
+                padding: 6px 8px;
+            }
+        }
+
         /* Main Workspace Layout */
         main {
             max-width: 1440px;
@@ -1234,7 +1290,7 @@
     </style>
 </head>
 
-<body>
+<body data-page-title-key="app.title.line">
     <a class="skip" href="#workspace">ข้ามไปเครื่องคำนวณ</a>
     <header>
         <div class="bar">
@@ -1245,26 +1301,36 @@
             <nav class="nav-tabs" aria-label="การเลือกหน้าคำนวณ">
                 <a href="index.html" class="nav-tab">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"></path><path d="m3.3 7 8.7 5 8.7-5"></path><path d="M12 22V12"></path></svg>
-                    <span>จัดเรียงตู้คอนเทนเนอร์</span>
+                    <span data-i18n="nav.container">จัดเรียงตู้คอนเทนเนอร์</span>
                 </a>
                 <a href="line-production.html" class="nav-tab active" aria-current="page">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 20a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8l-6 4V8l-6 4V4H2Z"></path><path d="M17 18h1"></path><path d="M12 18h1"></path><path d="M7 18h1"></path></svg>
-                    <span>คำนวณไลน์ผลิต</span>
-                    <span class="nav-tab-badge">ใหม่</span>
+                    <span data-i18n="nav.line">คำนวณไลน์ผลิต</span>
+                    <span class="nav-tab-badge" data-i18n="nav.badge.new">ใหม่</span>
                 </a>
             </nav>
             <div class="header-tools">
-                <button type="button" id="copy-spec-btn-header" class="header-action-btn" title="คัดลอกสรุปผลการจัดไลน์ผลิต">
+                <div class="lang-switch" role="group" aria-label="Language selection / 语言选择">
+                    <button type="button" class="lang-btn active" data-lang="th" title="ภาษาไทย">
+                        <span class="lang-flag" aria-hidden="true">🇹🇭</span>
+                        <span class="lang-name">ไทย</span>
+                    </button>
+                    <button type="button" class="lang-btn" data-lang="zh" title="中文 (简体)">
+                        <span class="lang-flag" aria-hidden="true">🇨🇳</span>
+                        <span class="lang-name">中文</span>
+                    </button>
+                </div>
+                <button type="button" id="copy-spec-btn-header" class="header-action-btn" data-i18n-title="header.copy.title" title="คัดลอกสรุปผลการจัดไลน์ผลิต">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-                    <span>คัดลอกสรุป</span>
+                    <span data-i18n="header.copy">คัดลอกสรุป</span>
                 </button>
-                <button type="button" id="print-btn-header" class="header-action-btn" title="พิมพ์ใบสั่งผลิตหรือบันทึก PDF">
+                <button type="button" id="print-btn-header" class="header-action-btn" data-i18n-title="header.print.title" title="พิมพ์ใบสั่งผลิตหรือบันทึก PDF">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
-                    <span>พิมพ์</span>
+                    <span data-i18n="header.print">พิมพ์</span>
                 </button>
-                <button type="button" id="reset-button" class="header-action-btn" title="ล้างข้อมูลและเริ่มใหม่">
+                <button type="button" id="reset-button" class="header-action-btn" data-i18n-title="header.reset.title" title="ล้างข้อมูลและเริ่มใหม่">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path></svg>
-                    <span>เริ่มใหม่</span>
+                    <span data-i18n="header.reset">เริ่มใหม่</span>
                 </button>
             </div>
         </div>
@@ -1273,10 +1339,10 @@
     <main id="workspace">
         <div class="intro">
             <div>
-                <h1>วางแผนไลน์การผลิตม้วนกระดาษ</h1>
-                <p class="muted">เลือกเครื่องจักร ใส่รายการออเดอร์ แล้วดูเครื่องจักรที่คุ้มค่าและผังชุดตัดได้ทันที</p>
+                <h1 data-i18n="line.intro.title">วางแผนไลน์การผลิตม้วนกระดาษ</h1>
+                <p class="muted" data-i18n="line.intro.desc">เลือกเครื่องจักร ใส่รายการออเดอร์ แล้วดูเครื่องจักรที่คุ้มค่าและผังชุดตัดได้ทันที</p>
             </div>
-            <span class="live-label">คำนวณอัตโนมัติเมื่อแก้ไขข้อมูล</span>
+            <span class="live-label" data-i18n="line.intro.live">คำนวณอัตโนมัติเมื่อแก้ไขข้อมูล</span>
         </div>
 
         <div class="workspace">
@@ -1286,7 +1352,7 @@
                 <section class="card" aria-labelledby="mach-title">
                     <div class="section-title">
                         <span class="step">1</span>
-                        <h2 id="mach-title">เครื่องจักรและความยาวหน้ากว้างผลิต (คลิกเพื่อเปิด/ปิดเครื่อง)</h2>
+                        <h2 id="mach-title" data-i18n="line.step1.title">เครื่องจักรและความยาวหน้ากว้างผลิต (คลิกเพื่อเปิด/ปิดเครื่อง)</h2>
                     </div>
 
                     <div class="presets" id="machine-presets">
@@ -1298,11 +1364,11 @@
                     </p>
 
                     <details id="machine-details">
-                        <summary>ดู / ปรับช่วงความยาวหน้ากว้าง & สเปกเครื่องจักร</summary>
+                        <summary data-i18n="line.step1.details_toggle">ดู / ปรับช่วงความยาวหน้ากว้าง & สเปกเครื่องจักร</summary>
                         <div id="machine-fields" style="display: grid; gap: 10px; margin-top: 8px;">
                             <!-- Injected by JS -->
                         </div>
-                        <p class="hint">ค่าเริ่มต้นของ PM2, PM3, PM5 ตรงตามสเปกโรงงาน ส่วน PM1 กำหนดไว้ 1,600-1,800 มม. สามารถแก้ไขได้</p>
+                        <p class="hint" data-i18n="line.step1.hint">ค่าเริ่มต้นของ PM2, PM3, PM5 ตรงตามสเปกโรงงาน ส่วน PM1 กำหนดไว้ 1,600-1,800 มม. สามารถแก้ไขได้</p>
                     </details>
                 </section>
 
@@ -1310,15 +1376,15 @@
                 <section class="card" aria-labelledby="order-title">
                     <div class="section-title">
                         <span class="step">2</span>
-                        <h2 id="order-title">ใส่ข้อมูลออเดอร์ม้วนกระดาษ</h2>
+                        <h2 id="order-title" data-i18n="line.step2.title">ใส่ข้อมูลออเดอร์ม้วนกระดาษ</h2>
                     </div>
 
                     <div class="samples">
-                        <span>ลองตัวอย่าง:</span>
-                        <button type="button" data-sample="mix">ผสม KT+CA</button>
-                        <button type="button" data-sample="ca-only">CA ล้วน</button>
-                        <button type="button" data-sample="kt-large">KT หน้ากว้าง</button>
-                        <button type="button" data-sample="multi">หลายขนาด</button>
+                        <span data-i18n="line.step2.samples">ลองตัวอย่าง:</span>
+                        <button type="button" data-sample="mix" data-i18n="line.step2.sample_mix">ผสม KT+CA</button>
+                        <button type="button" data-sample="ca-only" data-i18n="line.step2.sample_ca">CA ล้วน</button>
+                        <button type="button" data-sample="kt-large" data-i18n="line.step2.sample_kt">KT หน้ากว้าง</button>
+                        <button type="button" data-sample="multi" data-i18n="line.step2.sample_multi">หลายขนาด</button>
                     </div>
 
                     <div class="orders-box">
@@ -1326,9 +1392,9 @@
                             <thead>
                                 <tr>
                                     <th style="width: 24px;">#</th>
-                                    <th style="width: 65px;">เกรด</th>
-                                    <th>หน้ากว้าง (มม.)</th>
-                                    <th>จำนวน (ม้วน)</th>
+                                    <th style="width: 65px;" data-i18n="line.step2.th_grade">เกรด</th>
+                                    <th data-i18n="line.step2.th_width">หน้ากว้าง (มม.)</th>
+                                    <th data-i18n="line.step2.th_qty">จำนวน (ม้วน)</th>
                                     <th style="width: 28px;"></th>
                                 </tr>
                             </thead>
@@ -1339,7 +1405,7 @@
                     </div>
 
                     <div class="order-row-actions">
-                        <button type="button" class="primary" id="add-order-btn" style="min-height: 38px; padding: 6px 12px;">
+                        <button type="button" class="primary" id="add-order-btn" style="min-height: 38px; padding: 6px 12px;" data-i18n="line.step2.add_order_btn">
                             ＋ เพิ่มออเดอร์
                         </button>
                         <span class="num" id="order-quick-summary" style="font-size: .8125rem; color: var(--muted);">0 รายการ</span>
@@ -1347,19 +1413,19 @@
 
                     <!-- Strategy Segmented Control (Matches RollPack Pro Orientation) -->
                     <div class="orientation">
-                        <p>เป้าหมายความคุ้มค่า (Optimization Strategy)</p>
+                        <p data-i18n="line.step2.strategy_title">เป้าหมายความคุ้มค่า (Optimization Strategy)</p>
                         <div class="seg" role="group" aria-label="เป้าหมายความคุ้มค่า">
                             <button type="button" data-strategy="recommended" aria-pressed="true">
                                 <span class="seg-icon" aria-hidden="true">★</span>
-                                <span>แนะนำโดยระบบ</span>
+                                <span data-i18n="line.step2.strat_rec">แนะนำโดยระบบ</span>
                             </button>
                             <button type="button" data-strategy="min-machines" aria-pressed="false">
                                 <span class="seg-icon" aria-hidden="true">⚡</span>
-                                <span>เดินเครื่องน้อยสุด</span>
+                                <span data-i18n="line.step2.strat_min_mach">เดินเครื่องน้อยสุด</span>
                             </button>
                             <button type="button" data-strategy="min-waste" aria-pressed="false">
                                 <span class="seg-icon" aria-hidden="true">🌿</span>
-                                <span>เศษกระดาษต่ำสุด</span>
+                                <span data-i18n="line.step2.strat_min_waste">เศษกระดาษต่ำสุด</span>
                             </button>
                         </div>
                         <p class="hint" id="strategy-help">
@@ -1387,16 +1453,16 @@ CA	1050	70"></textarea>
                 <div class="results-header">
                     <div class="section-title">
                         <span class="step">3</span>
-                        <h2 id="result-title">ผลการคำนวณและผังชุดตัด</h2>
+                        <h2 id="result-title" data-i18n="line.step3.title">ผลการคำนวณและผังชุดตัด</h2>
                     </div>
                     <div class="action-tools">
-                        <button type="button" id="copy-spec-btn" class="action-btn" title="คัดลอกรายละเอียดและผลการคำนวณทั้งหมด">
+                        <button type="button" id="copy-spec-btn" class="action-btn" data-i18n-title="header.copy_spec.title" title="คัดลอกรายละเอียดและผลการคำนวณทั้งหมด">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-                            <span class="btn-text">คัดลอกสเปก</span>
+                            <span class="btn-text" data-i18n="line.step3.copy_spec">คัดลอกสเปก</span>
                         </button>
-                        <button type="button" id="print-btn" class="action-btn" title="พิมพ์รายงานหรือบันทึกเป็น PDF">
+                        <button type="button" id="print-btn" class="action-btn" data-i18n-title="header.print.title" title="พิมพ์รายงานหรือบันทึกเป็น PDF">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
-                            <span class="btn-text">พิมพ์</span>
+                            <span class="btn-text" data-i18n="line.step3.print">พิมพ์</span>
                         </button>
                     </div>
                 </div>
@@ -1405,7 +1471,7 @@ CA	1050	70"></textarea>
                 <div class="result-main">
                     <div class="result-top">
                         <div>
-                            <p class="eyebrow">เครื่องจักรที่แนะนำสูงสุด</p>
+                            <p class="eyebrow" data-i18n="line.step3.eyebrow">เครื่องจักรที่แนะนำสูงสุด</p>
                             <div class="count-line">
                                 <strong class="big-count num" id="result-machine">—</strong>
                                 <span id="result-machine-sub">เครื่องเดียว</span>
@@ -1419,25 +1485,25 @@ CA	1050	70"></textarea>
 
                     <div class="result-bottom">
                         <div>
-                            <label>จำนวนเครื่องเปิด</label>
+                            <label data-i18n="line.step3.stat_machines">จำนวนเครื่องเปิด</label>
                             <strong class="num" id="stat-active-machines">—</strong>
                         </div>
                         <div>
-                            <label>เศษ Trim Loss</label>
+                            <label data-i18n="line.step3.stat_trim">เศษ Trim Loss</label>
                             <strong class="num" id="stat-trim">—</strong>
                         </div>
                         <div>
-                            <label>แม่ม้วนที่ผลิต</label>
+                            <label data-i18n="line.step3.stat_sets">แม่ม้วนที่ผลิต</label>
                             <strong class="num" id="stat-sets">—</strong>
                         </div>
                         <div>
-                            <label>ม้วนออเดอร์รวม</label>
+                            <label data-i18n="line.step3.stat_rolls">ม้วนออเดอร์รวม</label>
                             <strong class="num" id="stat-rolls">—</strong>
                         </div>
                     </div>
 
                     <div class="progress-row">
-                        <span>สัดส่วนการใช้หน้ากระดาษแม่ม้วน (Deckle Yield)</span>
+                        <span data-i18n="line.step3.stat_yield">สัดส่วนการใช้หน้ากระดาษแม่ม้วน (Deckle Yield)</span>
                         <span class="num" id="stat-utilization">—</span>
                     </div>
                     <progress id="yield-progress" max="100" value="0" aria-label="สัดส่วนการใช้หน้ากระดาษ"></progress>
@@ -1447,12 +1513,12 @@ CA	1050	70"></textarea>
                 <div class="card">
                     <div class="plan-header">
                         <div>
-                            <h3>ผังจำลองชุดตัดแม่ม้วน (Slitting Diagram)</h3>
+                            <h3 data-i18n="line.step3.diagram_title">ผังจำลองชุดตัดแม่ม้วน (Slitting Diagram)</h3>
                             <p id="plan-subtitle">ชุดตัดที่ 1 จาก 1</p>
                         </div>
                         <div class="view-switch" role="group" aria-label="มุมมองผัง">
-                            <button type="button" id="view-mode-single" aria-pressed="true">ทีละชุด</button>
-                            <button type="button" id="view-mode-all" aria-pressed="false">ทุกชุดตัด</button>
+                            <button type="button" id="view-mode-single" aria-pressed="true" data-i18n="line.step3.view_single">ทีละชุด</button>
+                            <button type="button" id="view-mode-all" aria-pressed="false" data-i18n="line.step3.view_all">ทุกชุดตัด</button>
                         </div>
                     </div>
 
@@ -1462,12 +1528,12 @@ CA	1050	70"></textarea>
 
                     <div class="plan-footer">
                         <div class="legend">
-                            <span><i class="swatch"></i>ม้วนที่ตัดได้</span>
-                            <span><i class="swatch trim"></i>เศษริม (Trim Loss)</span>
-                            <span><i class="swatch knife"></i>ใบมีดกรีด</span>
+                            <span><i class="swatch"></i><span data-i18n="line.step3.legend_rolls">ม้วนที่ตัดได้</span></span>
+                            <span><i class="swatch trim"></i><span data-i18n="line.step3.legend_trim">เศษริม (Trim Loss)</span></span>
+                            <span><i class="swatch knife"></i><span data-i18n="line.step3.legend_knife">ใบมีดกรีด</span></span>
                         </div>
                         <div class="layers" id="pattern-controls">
-                            <span>ชุดตัด</span>
+                            <span data-i18n="line.step3.pattern_label">ชุดตัด</span>
                             <button type="button" id="pat-prev" aria-label="ดูชุดตัดก่อนหน้า">‹</button>
                             <span class="num" id="pat-label">1 / 1</span>
                             <button type="button" id="pat-next" aria-label="ดูชุดตัดถัดไป">›</button>
@@ -1476,31 +1542,31 @@ CA	1050	70"></textarea>
 
                     <div class="mini-stats">
                         <div>
-                            <span>หน้ากว้างแม่ม้วนที่ตั้ง</span>
+                            <span data-i18n="line.step3.stat_deckle">หน้ากว้างแม่ม้วนที่ตั้ง</span>
                             <strong id="mini-deckle" class="num">—</strong>
                         </div>
                         <div>
-                            <span>รอบผลิตชุดนี้</span>
+                            <span data-i18n="line.step3.stat_pattern_sets">รอบผลิตชุดนี้</span>
                             <strong id="mini-sets" class="num">—</strong>
                         </div>
                         <div>
-                            <span>ม้วนที่ได้จากชุดนี้</span>
+                            <span data-i18n="line.step3.stat_pattern_rolls">ม้วนที่ได้จากชุดนี้</span>
                             <strong id="mini-output" class="num">—</strong>
                         </div>
                     </div>
 
                     <!-- Expandable Machine Comparison (Like RollPack Comparison) -->
                     <details id="comparison-details">
-                        <summary>เปรียบเทียบทุกแผนการเดินเครื่อง</summary>
+                        <summary data-i18n="line.step3.compare_title">เปรียบเทียบทุกแผนการเดินเครื่อง</summary>
                         <div class="table-scroll">
                             <table class="comparison">
                                 <thead>
                                     <tr>
-                                        <th scope="col">แผนเครื่องจักร</th>
-                                        <th scope="col">จำนวนเครื่อง</th>
-                                        <th scope="col">เศษ Trim (%)</th>
-                                        <th scope="col">แม่ม้วน (Sets)</th>
-                                        <th scope="col">การประเมิน</th>
+                                        <th scope="col" data-i18n="line.step3.th_plan">แผนเครื่องจักร</th>
+                                        <th scope="col" data-i18n="line.step3.th_machines">จำนวนเครื่อง</th>
+                                        <th scope="col" data-i18n="line.step3.th_trim">เศษ Trim (%)</th>
+                                        <th scope="col" data-i18n="line.step3.th_sets">แม่ม้วน (Sets)</th>
+                                        <th scope="col" data-i18n="line.step3.th_status">การประเมิน</th>
                                     </tr>
                                 </thead>
                                 <tbody id="comparison-tbody">
@@ -1513,19 +1579,19 @@ CA	1050	70"></textarea>
 
                     <!-- Expandable Work Order Table -->
                     <details id="workorder-details">
-                        <summary>ดูใบสั่งงานสำหรับช่างคุมเครื่อง (Slitter Work Order)</summary>
+                        <summary data-i18n="line.step3.workorder_title">ดูใบสั่งงานสำหรับช่างคุมเครื่อง (Slitter Work Order)</summary>
                         <div class="table-scroll">
                             <table class="comparison">
                                 <thead>
                                     <tr>
-                                        <th scope="col">ชุดตัด #</th>
-                                        <th scope="col">เครื่องจักร</th>
-                                        <th scope="col">เกรด</th>
-                                        <th scope="col">หน้ากว้างแม่ม้วน</th>
-                                        <th scope="col">ขนาดม้วนที่ตัด (มม.)</th>
-                                        <th scope="col">ตำแหน่งมีด (มม.)</th>
-                                        <th scope="col">รอบผลิต (Sets)</th>
-                                        <th scope="col">เศษริม (มม.)</th>
+                                        <th scope="col" data-i18n="line.step3.th_set_no">ชุดตัด #</th>
+                                        <th scope="col" data-i18n="line.step3.th_machine">เครื่องจักร</th>
+                                        <th scope="col" data-i18n="line.step3.th_grade_col">เกรด</th>
+                                        <th scope="col" data-i18n="line.step3.th_deckle_col">หน้ากว้างแม่ม้วน</th>
+                                        <th scope="col" data-i18n="line.step3.th_cuts_col">ขนาดม้วนที่ตัด (มม.)</th>
+                                        <th scope="col" data-i18n="line.step3.th_knives_col">ตำแหน่งมีด (มม.)</th>
+                                        <th scope="col" data-i18n="line.step3.th_sets_col">รอบผลิต (Sets)</th>
+                                        <th scope="col" data-i18n="line.step3.th_trim_col">เศษริม (มม.)</th>
                                     </tr>
                                 </thead>
                                 <tbody id="workorder-tbody">
@@ -1537,21 +1603,22 @@ CA	1050	70"></textarea>
                 </div>
 
                 <div class="notes">
-                    <p>ผลการคำนวณเป็นการจำลองการจัดชุดตัด (Cutting Stock Pattern) ตามช่วงหน้ากว้างของเครื่องจักรที่เปิดใช้งาน</p>
-                    <p>ก่อนเริ่มการผลิตจริง ฝ่ายผลิตควรตรวจสอบการรับแรงดึงของใบมีดกรีด การสำรองเศษริม และคลังสต็อกแม่ม้วน</p>
+                    <p data-i18n="line.notes.1">ผลการคำนวณเป็นการจำลองการจัดชุดตัด (Cutting Stock Pattern) ตามช่วงหน้ากว้างของเครื่องจักรที่เปิดใช้งาน</p>
+                    <p data-i18n="line.notes.2">ก่อนเริ่มการผลิตจริง ฝ่ายผลิตควรตรวจสอบการรับแรงดึงของใบมีดกรีด การสำรองเศษริม และคลังสต็อกแม่ม้วน</p>
                 </div>
             </section>
         </div>
 
         <div class="footer">
-            <span>RollPack Pro · เครื่องมือวางแผนไลน์ผลิตและตัดม้วนกระดาษ</span>
-            <span>สเปกเครื่องจักรและรายการออเดอร์สามารถปรับเปลี่ยนได้ตามจริง</span>
+            <span data-i18n="line.footer.1">RollPack Pro · เครื่องมือวางแผนไลน์ผลิตและตัดม้วนกระดาษ</span>
+            <span data-i18n="line.footer.2">สเปกเครื่องจักรและรายการออเดอร์สามารถปรับเปลี่ยนได้ตามจริง</span>
         </div>
     </main>
 
     <!-- Toast Notification -->
     <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
+    <script src="./i18n.js"></script>
     <script src="./line-production.js"></script>
 </body>
 
