@@ -346,49 +346,179 @@
         .presets {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 9px;
+            gap: 10px;
         }
 
         .preset {
             text-align: left;
-            padding: 11px 13px;
-            border-radius: 11px;
+            padding: 12px 14px;
+            border-radius: 12px;
             position: relative;
             background: white;
-            border: 1px solid var(--line);
+            border: 1.5px solid var(--line);
             transition: all .15s ease;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            min-height: 104px;
+            justify-content: space-between;
         }
 
-        .preset strong {
-            display: block;
-            font-size: .9375rem;
-        }
-
-        .preset span {
-            display: block;
-            color: var(--muted);
-            font-size: .8125rem;
-            font-weight: 400;
+        .preset:hover {
+            border-color: #9cb3eb;
+            background: #fafdff;
         }
 
         .preset[aria-pressed=true] {
-            background: var(--soft);
+            background: #f0f6ff;
             border-color: var(--blue);
-            color: #194fcf;
-        }
-
-        .preset[aria-pressed=true]:after {
-            content: '✓';
-            position: absolute;
-            right: 10px;
-            top: 9px;
-            color: var(--blue);
-            font-weight: 700;
+            box-shadow: 0 2px 8px rgba(36, 92, 229, 0.12);
         }
 
         .preset[aria-pressed=false] {
             opacity: .6;
             background: #f8fafc;
+            border-color: #e2e8f0;
+        }
+
+        .mach-top-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 6px;
+        }
+
+        .mach-name-wrap {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .mach-name {
+            font-size: 1.1rem;
+            font-weight: 800;
+            color: var(--navy);
+            letter-spacing: -.2px;
+            line-height: 1;
+        }
+
+        .preset[aria-pressed=true] .mach-name {
+            color: #1a4bc4;
+        }
+
+        .mach-grade-badge {
+            font-size: .6875rem;
+            font-weight: 700;
+            padding: 1px 6px;
+            border-radius: 4px;
+            letter-spacing: .2px;
+            line-height: 1.4;
+        }
+
+        .mach-grade-badge.kt {
+            background: #fef3c7;
+            color: #92400e;
+            border: 1px solid #fde68a;
+        }
+
+        .mach-grade-badge.ca {
+            background: #dcfce7;
+            color: #166534;
+            border: 1px solid #bbf7d0;
+        }
+
+        .mach-check {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: all .15s ease;
+        }
+
+        .preset[aria-pressed=true] .mach-check {
+            background: var(--blue);
+            color: white;
+        }
+
+        .preset[aria-pressed=false] .mach-check {
+            background: #e2e8f0;
+            color: transparent;
+        }
+
+        .mach-check svg {
+            width: 14px;
+            height: 14px;
+            stroke-width: 3;
+        }
+
+        .mach-length-section {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            margin: 1px 0;
+            padding: 5px 0;
+            border-top: 1px dashed rgba(200, 214, 235, 0.7);
+            border-bottom: 1px dashed rgba(200, 214, 235, 0.7);
+        }
+
+        .mach-length-title {
+            font-size: .6875rem;
+            font-weight: 600;
+            color: var(--muted);
+            letter-spacing: .2px;
+        }
+
+        .mach-length-num {
+            font-size: .9375rem;
+            font-weight: 700;
+            color: #1e293b;
+            white-space: nowrap;
+            letter-spacing: -.2px;
+        }
+
+        .preset[aria-pressed=true] .mach-length-num {
+            color: #1e3a8a;
+        }
+
+        .mach-length-unit {
+            font-size: .75rem;
+            font-weight: 500;
+            color: var(--muted);
+            margin-left: 2px;
+        }
+
+        .mach-status-row {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: .75rem;
+            font-weight: 500;
+            color: var(--muted);
+        }
+
+        .mach-status-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .preset[aria-pressed=true] .mach-status-dot {
+            background: #10b981;
+            box-shadow: 0 0 0 2px #d1fae5;
+        }
+
+        .preset[aria-pressed=true] .mach-status-row {
+            color: #047857;
+            font-weight: 600;
+        }
+
+        .preset[aria-pressed=false] .mach-status-dot {
+            background: #94a3b8;
         }
 
         .spec-summary {
@@ -1156,7 +1286,7 @@
                 <section class="card" aria-labelledby="mach-title">
                     <div class="section-title">
                         <span class="step">1</span>
-                        <h2 id="mach-title">เครื่องจักรในโรงงาน (คลิกเพื่อเปิด/ปิดเครื่อง)</h2>
+                        <h2 id="mach-title">เครื่องจักรและความยาวหน้ากว้างผลิต (คลิกเพื่อเปิด/ปิดเครื่อง)</h2>
                     </div>
 
                     <div class="presets" id="machine-presets">
@@ -1168,7 +1298,7 @@
                     </p>
 
                     <details id="machine-details">
-                        <summary>ดู / ปรับสเปกหน้ากว้าง & ต้นทุนเครื่องจักร</summary>
+                        <summary>ดู / ปรับช่วงความยาวหน้ากว้าง & สเปกเครื่องจักร</summary>
                         <div id="machine-fields" style="display: grid; gap: 10px; margin-top: 8px;">
                             <!-- Injected by JS -->
                         </div>

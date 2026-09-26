@@ -432,12 +432,35 @@ function renderStep1Machines() {
     const container = $('machine-presets');
     if (!container) return;
 
-    container.innerHTML = Object.values(machines).map(m => `
-        <button type="button" class="preset" data-pm="${m.id}" aria-pressed="${m.active}">
-            <strong>${m.name} · ${fmt(m.minDeckle)}–${fmt(m.maxDeckle)}</strong>
-            <span>${m.grades.join(', ')} · ${m.active ? 'พร้อมเดินเครื่อง' : 'ปิดซ่อมบำรุง'}</span>
-        </button>
-    `).join('');
+    container.innerHTML = Object.values(machines).map(m => {
+        const gradesHtml = m.grades.map(g => `<span class="mach-grade-badge ${g.toLowerCase()}">${g}</span>`).join(' ');
+        const rangeText = `${fmt(m.minDeckle)} – ${fmt(m.maxDeckle)}`;
+        const statusText = m.active ? 'พร้อมเดินเครื่อง' : 'ปิดซ่อมบำรุง';
+
+        return `
+            <button type="button" class="preset" data-pm="${m.id}" aria-pressed="${m.active}">
+                <div class="mach-top-row">
+                    <div class="mach-name-wrap">
+                        <span class="mach-name">${m.name}</span>
+                        ${gradesHtml}
+                    </div>
+                    <span class="mach-check" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    </span>
+                </div>
+
+                <div class="mach-length-section">
+                    <span class="mach-length-title">ความยาวผลิต (หน้ากว้าง)</span>
+                    <span class="mach-length-num num">${rangeText} <span class="mach-length-unit">มม.</span></span>
+                </div>
+
+                <div class="mach-status-row">
+                    <span class="mach-status-dot"></span>
+                    <span>${statusText}</span>
+                </div>
+            </button>
+        `;
+    }).join('');
 
     container.querySelectorAll('[data-pm]').forEach(btn => {
         btn.addEventListener('click', () => {
@@ -452,21 +475,27 @@ function renderStep1Machines() {
     const activeList = Object.values(machines).filter(m => m.active);
     const summary = $('mach-summary');
     if (summary) {
-        summary.innerHTML = `เปิดใช้งาน <strong>${activeList.length} จาก 4 เครื่อง</strong> · PM2 & PM3 ผลิต KT ได้ · PM1, PM2, PM3, PM5 ผลิต CA ได้`;
+        const activeDetails = activeList.length > 0
+            ? activeList.map(m => `<strong>${m.name}</strong> (${fmt(m.minDeckle)}–${fmt(m.maxDeckle)} มม.)`).join(', ')
+            : '<span style="color:#ef4444; font-weight:600;">ไม่มีเครื่องจักรที่เปิดใช้งาน (กรุณาเปิดอย่างน้อย 1 เครื่อง)</span>';
+        summary.innerHTML = `เปิดใช้งาน <strong>${activeList.length} จาก 4 เครื่อง</strong>: ${activeDetails}`;
     }
 
     // Render Editable fields inside <details>
     const fields = $('machine-fields');
     if (fields) {
         fields.innerHTML = Object.values(machines).map(m => `
-            <div style="display: grid; grid-template-columns: 80px 1fr 1fr; gap: 8px; align-items: center; background: #f8fafc; padding: 6px 10px; border-radius: 8px; border: 1px solid var(--line);">
-                <strong>${m.name}</strong>
+            <div style="display: grid; grid-template-columns: 85px 1fr 1fr; gap: 8px; align-items: center; background: #f8fafc; padding: 7px 12px; border-radius: 9px; border: 1px solid var(--line);">
                 <div>
-                    <span style="font-size: .6875rem; color: var(--muted); display: block;">ต่ำสุด (มม.)</span>
+                    <strong style="color: var(--navy); display: block;">${m.name}</strong>
+                    <div style="font-size: .6875rem; color: var(--muted);">${m.grades.join(', ')}</div>
+                </div>
+                <div>
+                    <span style="font-size: .6875rem; color: var(--muted); display: block;">ความยาวต่ำสุด (มม.)</span>
                     <input type="number" class="mini-input num" value="${m.minDeckle}" data-pm-min="${m.id}" step="10">
                 </div>
                 <div>
-                    <span style="font-size: .6875rem; color: var(--muted); display: block;">สูงสุด (มม.)</span>
+                    <span style="font-size: .6875rem; color: var(--muted); display: block;">ความยาวสูงสุด (มม.)</span>
                     <input type="number" class="mini-input num" value="${m.maxDeckle}" data-pm-max="${m.id}" step="10">
                 </div>
             </div>
@@ -566,11 +595,13 @@ function renderStep3Results() {
     $('result-machine-sub').textContent = plan.activeCount === 1 ? 'เดินเครื่องเดียว' : `${plan.activeCount} เครื่องพร้อมกัน`;
 
     if (plan.activeCount === 1) {
+        const m = machines[plan.usedMachines[0]];
         $('result-badge').textContent = '✓ คุ้มค่าสูงสุด (เดินเครื่องเดียว)';
-        $('result-detail').textContent = `รวบรวมคำสั่งผลิตทั้งหมดมารันบน ${machTitle} เพียงเครื่องเดียว ช่วยประหยัดต้นทุนค่าเปิดเครื่องจักรสูงสุด พร้อมรักษาเศษ Trim Loss รวมเพียง ${fmt(plan.overallTrimPercent, 1)}%`;
+        $('result-detail').textContent = `รวบรวมคำสั่งผลิตทั้งหมดมารันบน ${m ? m.name : machTitle} [ช่วงความยาวหน้ากว้าง ${m ? `${fmt(m.minDeckle)}–${fmt(m.maxDeckle)} มม.` : ''}] เพียงเครื่องเดียว ช่วยประหยัดต้นทุนค่าเปิดเครื่องจักรสูงสุด พร้อมรักษาเศษ Trim Loss รวมเพียง ${fmt(plan.overallTrimPercent, 1)}%`;
     } else {
+        const machDetails = plan.usedMachines.map(id => `${machines[id].name} (${fmt(machines[id].minDeckle)}–${fmt(machines[id].maxDeckle)} มม.)`).join(' และ ');
         $('result-badge').textContent = '2 เครื่อง (ตามขนาดหน้ากว้าง)';
-        $('result-detail').textContent = `แบ่งการผลิตตามความเหมาะสมของหน้ากว้างแม่ม้วน ช่วยลดเศษ Trim Loss รวมเหลือเพียง ${fmt(plan.overallTrimPercent, 1)}%`;
+        $('result-detail').textContent = `แบ่งการผลิตตามช่วงความยาวหน้ากว้างของ ${machDetails} ช่วยลดเศษ Trim Loss รวมเหลือเพียง ${fmt(plan.overallTrimPercent, 1)}%`;
     }
 
     $('stat-active-machines').textContent = `${plan.activeCount} เครื่อง`;
