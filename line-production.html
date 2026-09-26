@@ -1,0 +1,1424 @@
+<!doctype html>
+<html lang="th">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#12233d">
+    <title>RollPack Pro · คำนวณไลน์ผลิตและแผนตัดม้วนกระดาษ</title>
+    <link rel="manifest" href="./manifest.webmanifest">
+    <link rel="icon" href="./icon.svg" type="image/svg+xml">
+    <style>
+        :root {
+            --ink: #172840;
+            --muted: #586a80;
+            --line: #dce4ef;
+            --blue: #245ce5;
+            --navy: #12233d;
+            --bg: #f3f6fb;
+            --soft: #edf3ff;
+            --radius: 18px;
+            font-family: Tahoma, 'Noto Sans Thai', system-ui, sans-serif;
+            color: var(--ink);
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            margin: 0;
+            background: var(--bg);
+        }
+
+        button,
+        input,
+        select,
+        textarea {
+            font: inherit;
+        }
+
+        button,
+        summary,
+        select {
+            cursor: pointer;
+        }
+
+        button {
+            color: inherit;
+            min-height: 44px;
+            border: 1px solid var(--line);
+            background: white;
+            border-radius: 10px;
+            padding: 8px 14px;
+            font-size: .875rem;
+            font-weight: 600;
+            transition: background .15s, border-color .15s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        button:hover {
+            background: var(--soft);
+            border-color: #a8bce8;
+        }
+
+        button.primary {
+            background: var(--blue);
+            color: white;
+            border-color: var(--blue);
+        }
+
+        button.primary:hover {
+            background: #1a4bc4;
+            border-color: #1a4bc4;
+        }
+
+        button:disabled {
+            cursor: default;
+            opacity: .45;
+        }
+
+        button:focus-visible,
+        a:focus-visible,
+        input:focus-visible,
+        summary:focus-visible,
+        select:focus-visible {
+            outline: 3px solid #f39a27;
+            outline-offset: 3px;
+        }
+
+        a {
+            color: var(--blue);
+            text-decoration: none;
+        }
+
+        h1,
+        h2,
+        h3,
+        p {
+            margin: 0;
+        }
+
+        h1 {
+            font-size: 1.55rem;
+            letter-spacing: -.5px;
+        }
+
+        h2 {
+            font-size: 1rem;
+        }
+
+        h3 {
+            font-size: 1rem;
+        }
+
+        .muted {
+            color: var(--muted);
+        }
+
+        .eyebrow {
+            font-size: .75rem;
+            letter-spacing: 1.5px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .num {
+            font-family: ui-sans-serif, system-ui, sans-serif;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .skip {
+            position: absolute;
+            top: -100px;
+            background: white;
+            padding: 10px;
+            z-index: 20;
+        }
+
+        .skip:focus {
+            top: 0;
+        }
+
+        /* Header Navigation */
+        header {
+            background: var(--navy);
+            color: white;
+        }
+
+        header .bar {
+            max-width: 1440px;
+            margin: auto;
+            min-height: 76px;
+            padding: 14px 32px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font: 750 1.35rem system-ui, sans-serif;
+            letter-spacing: -.5px;
+        }
+
+        .brand em {
+            font-style: normal;
+            color: #8eaeff;
+        }
+
+        .brand-icon {
+            width: 38px;
+            height: 38px;
+            display: grid;
+            place-items: center;
+            background: var(--blue);
+            border-radius: 11px;
+            font-size: 1.1rem;
+        }
+
+        .nav-tabs {
+            display: flex;
+            align-items: center;
+            background: #ffffff14;
+            padding: 4px;
+            border-radius: 12px;
+            gap: 4px;
+            border: 1px solid #ffffff24;
+        }
+
+        .nav-tab {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 7px 15px;
+            border-radius: 9px;
+            color: #d1deef;
+            text-decoration: none;
+            font-size: .875rem;
+            font-weight: 600;
+            transition: all .15s ease;
+            white-space: nowrap;
+        }
+
+        .nav-tab:hover {
+            color: white;
+            background: #ffffff1c;
+        }
+
+        .nav-tab.active {
+            background: var(--blue);
+            color: white;
+            box-shadow: 0 2px 8px #245ce560;
+        }
+
+        .nav-tab svg,
+        .header-action-btn svg,
+        .header-tools button svg {
+            width: 17px;
+            height: 17px;
+            flex-shrink: 0;
+            display: inline-block;
+            vertical-align: -2px;
+        }
+
+        .nav-tab-badge {
+            font-size: .6875rem;
+            font-weight: 700;
+            padding: 2px 7px;
+            border-radius: 99px;
+            background: #f59e0b;
+            color: #0d1b2a;
+            letter-spacing: .3px;
+        }
+
+        .header-tools {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .header-action-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            background: #ffffff15;
+            color: #e4ebf8;
+            border: 1px solid #ffffff30;
+            border-radius: 9px;
+            padding: 8px 12px;
+            min-height: 44px;
+            font-size: .875rem;
+            font-weight: 600;
+            transition: background .15s;
+        }
+
+        .header-action-btn:hover {
+            background: #ffffff25;
+            color: white;
+        }
+
+        /* Main Workspace Layout */
+        main {
+            max-width: 1440px;
+            margin: auto;
+            padding: 26px 32px 48px;
+        }
+
+        .intro {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            margin-bottom: 24px;
+        }
+
+        .intro p {
+            font-size: .875rem;
+            margin-top: 4px;
+        }
+
+        .live-label {
+            font-size: .8125rem;
+            color: var(--muted);
+            background: white;
+            border: 1px solid var(--line);
+            border-radius: 99px;
+            padding: 6px 12px;
+            white-space: nowrap;
+        }
+
+        .workspace {
+            display: grid;
+            grid-template-columns: minmax(370px, 440px) minmax(0, 1fr);
+            gap: 24px;
+            align-items: start;
+        }
+
+        .inputs {
+            display: grid;
+            gap: 18px;
+        }
+
+        .card {
+            background: white;
+            border: 1px solid var(--line);
+            border-radius: var(--radius);
+            padding: 22px;
+            box-shadow: 0 3px 8px #12233d03;
+        }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 17px;
+        }
+
+        .step {
+            display: grid;
+            place-items: center;
+            width: 28px;
+            height: 28px;
+            border-radius: 8px;
+            background: var(--soft);
+            color: var(--blue);
+            font-size: .8125rem;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        /* Presets Grid (Machines) */
+        .presets {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 9px;
+        }
+
+        .preset {
+            text-align: left;
+            padding: 11px 13px;
+            border-radius: 11px;
+            position: relative;
+            background: white;
+            border: 1px solid var(--line);
+            transition: all .15s ease;
+        }
+
+        .preset strong {
+            display: block;
+            font-size: .9375rem;
+        }
+
+        .preset span {
+            display: block;
+            color: var(--muted);
+            font-size: .8125rem;
+            font-weight: 400;
+        }
+
+        .preset[aria-pressed=true] {
+            background: var(--soft);
+            border-color: var(--blue);
+            color: #194fcf;
+        }
+
+        .preset[aria-pressed=true]:after {
+            content: '✓';
+            position: absolute;
+            right: 10px;
+            top: 9px;
+            color: var(--blue);
+            font-weight: 700;
+        }
+
+        .preset[aria-pressed=false] {
+            opacity: .6;
+            background: #f8fafc;
+        }
+
+        .spec-summary {
+            margin-top: 14px;
+            line-height: 1.8;
+            font-size: .875rem;
+            color: var(--muted);
+        }
+
+        details {
+            margin-top: 14px;
+            border-top: 1px solid var(--line);
+            padding-top: 13px;
+        }
+
+        summary {
+            font-size: .875rem;
+            font-weight: 600;
+            min-height: 35px;
+            color: #335176;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        details[open] summary {
+            margin-bottom: 13px;
+        }
+
+        .hint {
+            font-size: .8125rem;
+            color: var(--muted);
+            margin-top: 10px;
+        }
+
+        /* Samples Buttons */
+        .samples {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            flex-wrap: wrap;
+            margin-bottom: 17px;
+        }
+
+        .samples span {
+            font-size: .8125rem;
+            color: var(--muted);
+        }
+
+        .samples button {
+            font-size: .8125rem;
+            min-height: 36px;
+            padding: 5px 10px;
+            font-weight: 400;
+        }
+
+        /* Orders Input Area */
+        .orders-box {
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 12px;
+        }
+
+        .orders-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: .875rem;
+        }
+
+        .orders-table th {
+            background: #f8fafc;
+            color: var(--muted);
+            font-size: .8125rem;
+            font-weight: 600;
+            padding: 8px 10px;
+            text-align: left;
+            border-bottom: 1px solid var(--line);
+        }
+
+        .orders-table td {
+            padding: 6px 8px;
+            border-bottom: 1px solid #f1f5f9;
+            vertical-align: middle;
+        }
+
+        .orders-table tr:last-child td {
+            border-bottom: 0;
+        }
+
+        .mini-input {
+            width: 100%;
+            height: 36px;
+            padding: 4px 8px;
+            border: 1px solid #c5d1e1;
+            border-radius: 7px;
+            font-size: .875rem;
+        }
+
+        .mini-input:hover {
+            border-color: #819aba;
+        }
+
+        .mini-input:focus {
+            border-color: var(--blue);
+        }
+
+        .badge-select {
+            font-weight: 700;
+            border-radius: 6px;
+            padding: 2px 6px;
+            border: 1px solid #cbd5e1;
+            height: 36px;
+        }
+
+        .badge-select.kt {
+            background: #fef3c7;
+            color: #92400e;
+            border-color: #fde68a;
+        }
+
+        .badge-select.ca {
+            background: #d1fae5;
+            color: #065f46;
+            border-color: #a7f3d0;
+        }
+
+        .del-order-btn {
+            background: none;
+            border: none;
+            color: #94a3b8;
+            padding: 4px;
+            min-height: auto;
+            border-radius: 6px;
+        }
+
+        .del-order-btn:hover {
+            color: #dc2626;
+            background: #fee2e2;
+        }
+
+        .order-row-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        /* Segmented Buttons */
+        .orientation {
+            margin-top: 18px;
+        }
+
+        .orientation>p {
+            font-size: .875rem;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+
+        .seg {
+            display: flex;
+            gap: 6px;
+        }
+
+        .seg button {
+            flex: 1;
+            padding: 8px 6px;
+            font-weight: 500;
+            font-size: .8125rem;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .seg button span.seg-icon {
+            font-size: 1.1rem;
+            line-height: 1;
+        }
+
+        .seg button[aria-pressed=true] {
+            background: var(--soft);
+            border-color: var(--blue);
+            color: #194fcf;
+        }
+
+        /* Results Column */
+        .results {
+            min-width: 0;
+            display: grid;
+            gap: 18px;
+        }
+
+        .results-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: -5px;
+            flex-wrap: wrap;
+        }
+
+        .action-tools {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .action-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            min-height: 40px;
+            padding: 6px 14px;
+            border: 1px solid var(--line);
+            background: white;
+            color: var(--ink);
+            border-radius: 9px;
+            font-size: .875rem;
+            font-weight: 600;
+            transition: all .15s ease;
+        }
+
+        .action-btn:hover {
+            background: var(--soft);
+            border-color: #a8bce8;
+            color: var(--blue);
+        }
+
+        .action-btn svg {
+            width: 16px;
+            height: 16px;
+            flex-shrink: 0;
+        }
+
+        /* Dark Navy Result Main (Matches RollPack Pro) */
+        .result-main {
+            border-radius: var(--radius);
+            padding: 23px 26px;
+            background: var(--navy);
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .result-top {
+            display: flex;
+            justify-content: space-between;
+            gap: 16px;
+            align-items: flex-start;
+        }
+
+        .result-main .eyebrow {
+            color: #8eaeff;
+        }
+
+        .result-main h2 {
+            font-size: 1rem;
+            color: #d7e2f5;
+            font-weight: 400;
+        }
+
+        .count-line {
+            display: flex;
+            align-items: baseline;
+            gap: 10px;
+            margin: 4px 0;
+        }
+
+        .big-count {
+            font-size: 3.2rem;
+            font-weight: 700;
+            line-height: 1.15;
+            letter-spacing: -1.5px;
+            color: white;
+        }
+
+        .result-main .count-line>span:last-child {
+            color: #b9c9e3;
+            font-size: 1.05rem;
+            font-weight: 500;
+        }
+
+        .status-pill {
+            border: 1px solid #4c6489;
+            color: #d9e6ff;
+            border-radius: 99px;
+            font-size: .8125rem;
+            padding: 5px 12px;
+            white-space: nowrap;
+            background: rgba(255, 255, 255, .05);
+        }
+
+        .result-detail {
+            color: #bdcce4;
+            font-size: .875rem;
+            margin-top: 8px;
+            line-height: 1.5;
+        }
+
+        .result-bottom {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 14px;
+            border-top: 1px solid #ffffff20;
+            margin-top: 19px;
+            padding-top: 16px;
+        }
+
+        .result-bottom label {
+            display: block;
+            font-size: .75rem;
+            color: #afc2df;
+            text-transform: uppercase;
+            letter-spacing: .3px;
+        }
+
+        .result-bottom strong {
+            font-size: 1.25rem;
+            display: block;
+            margin-top: 2px;
+            color: white;
+        }
+
+        .progress-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 8px;
+            font-size: .8125rem;
+            color: #b5c6e2;
+            margin-top: 16px;
+        }
+
+        progress {
+            appearance: none;
+            display: block;
+            width: 100%;
+            height: 6px;
+            border: 0;
+            background: #354865;
+            border-radius: 9px;
+            margin-top: 8px;
+            overflow: hidden;
+        }
+
+        progress::-webkit-progress-bar {
+            background: #354865;
+        }
+
+        progress::-webkit-progress-value {
+            background: #79a0ff;
+            border-radius: 9px;
+        }
+
+        progress::-moz-progress-bar {
+            background: #79a0ff;
+        }
+
+        /* Diagram Card */
+        .plan-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .plan-header p {
+            font-size: .8125rem;
+            color: var(--muted);
+            margin-top: 4px;
+        }
+
+        .diagram {
+            margin: 16px 0 12px;
+            background-color: #f7f9fd;
+            background-image: radial-gradient(#d8e2ef 1px, transparent 1px);
+            background-size: 16px 16px;
+            border: 1px solid #e3eaf3;
+            border-radius: 12px;
+            padding: 16px 14px;
+            min-height: 140px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .diagram-bar-container {
+            width: 100%;
+        }
+
+        .diagram-bar {
+            display: flex;
+            height: 52px;
+            border-radius: 9px;
+            overflow: hidden;
+            border: 1px solid #94a3b8;
+            position: relative;
+            background: #ffffff;
+            box-shadow: 0 2px 6px rgba(18, 35, 61, .06);
+        }
+
+        .slit-roll {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border-right: 2px dashed rgba(255, 255, 255, .7);
+            color: white;
+            font-weight: 700;
+            font-size: .8125rem;
+            padding: 0 4px;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, .4);
+            position: relative;
+            transition: opacity .15s ease;
+        }
+
+        .slit-roll:hover {
+            opacity: .92;
+        }
+
+        .slit-roll .roll-w {
+            font-size: .875rem;
+        }
+
+        .slit-roll .roll-name {
+            font-size: .6875rem;
+            font-weight: 500;
+            opacity: .9;
+        }
+
+        .trim-waste {
+            height: 100%;
+            background: repeating-linear-gradient(45deg, #fee2e2, #fee2e2 8px, #fca5a5 8px, #fca5a5 16px);
+            color: #991b1b;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: .75rem;
+            font-weight: 700;
+            white-space: nowrap;
+            padding: 0 6px;
+        }
+
+        .knife-line-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: .6875rem;
+            color: var(--muted);
+            margin-top: 4px;
+            padding: 0 4px;
+        }
+
+        .plan-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .legend {
+            display: flex;
+            gap: 14px;
+            color: var(--muted);
+            font-size: .8125rem;
+            flex-wrap: wrap;
+        }
+
+        .legend span {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .swatch {
+            width: 10px;
+            height: 10px;
+            background: #2563eb;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .swatch.trim {
+            background: #fca5a5;
+            border: 1px dashed #dc2626;
+            border-radius: 2px;
+        }
+
+        .swatch.knife {
+            border-radius: 2px;
+            background: #e59b27;
+        }
+
+        .layers {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+            font-size: .8125rem;
+        }
+
+        .layers button {
+            min-width: 38px;
+            min-height: 38px;
+            padding: 5px 10px;
+        }
+
+        .view-switch {
+            display: flex;
+            gap: 5px;
+        }
+
+        .view-switch button {
+            font-weight: 500;
+            padding: 6px 12px;
+            min-height: 38px;
+        }
+
+        .view-switch button[aria-pressed=true] {
+            background: var(--soft);
+            border-color: var(--blue);
+            color: #194fcf;
+        }
+
+        .mini-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            margin-top: 18px;
+            padding-top: 16px;
+            border-top: 1px solid var(--line);
+            gap: 15px;
+        }
+
+        .mini-stats span {
+            font-size: .8125rem;
+            color: var(--muted);
+            display: block;
+        }
+
+        .mini-stats strong {
+            display: block;
+            font-size: 1.125rem;
+            margin-top: 2px;
+        }
+
+        /* Comparison Table */
+        .comparison {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: .875rem;
+        }
+
+        .comparison td,
+        .comparison th {
+            text-align: left;
+            padding: 10px 8px;
+            border-bottom: 1px solid #edf1f7;
+        }
+
+        .comparison th {
+            color: var(--muted);
+            font-weight: 500;
+            font-size: .8125rem;
+        }
+
+        .comparison td:last-child,
+        .comparison th:last-child {
+            text-align: right;
+        }
+
+        .comparison tr.chosen {
+            background: var(--soft);
+            color: #194fcf;
+            font-weight: 600;
+        }
+
+        .table-scroll {
+            overflow-x: auto;
+        }
+
+        .notes {
+            font-size: .8125rem;
+            color: var(--muted);
+            padding: 0 5px;
+        }
+
+        .notes p+p {
+            margin-top: 7px;
+        }
+
+        .footer {
+            margin-top: 48px;
+            padding-top: 20px;
+            border-top: 1px solid var(--line);
+            display: flex;
+            justify-content: space-between;
+            font-size: .8125rem;
+            color: var(--muted);
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 28px;
+            left: 50%;
+            transform: translateX(-50%) translateY(40px);
+            background: var(--navy);
+            color: white;
+            padding: 10px 22px;
+            border-radius: 99px;
+            font-size: .875rem;
+            font-weight: 500;
+            box-shadow: 0 12px 32px rgba(18, 35, 61, .35);
+            border: 1px solid rgba(255, 255, 255, .2);
+            z-index: 9999;
+            pointer-events: none;
+            opacity: 0;
+            transition: all .25s ease;
+        }
+
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+
+        /* Responsive */
+        @media(max-width:900px) {
+            header .bar {
+                padding: 12px 16px;
+                flex-wrap: wrap;
+                gap: 12px;
+            }
+
+            .nav-tabs {
+                order: 3;
+                width: 100%;
+                justify-content: stretch;
+            }
+
+            .nav-tab {
+                flex: 1;
+                justify-content: center;
+                padding: 8px 10px;
+                font-size: .8125rem;
+            }
+
+            main {
+                padding: 20px 16px 90px;
+            }
+
+            .workspace {
+                grid-template-columns: 1fr;
+            }
+
+            .card {
+                padding: 20px;
+            }
+
+            .result-bottom {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .big-count {
+                font-size: 2.6rem;
+            }
+        }
+
+        /* Print */
+        @media print {
+            @page {
+                size: A4 portrait;
+                margin: 10mm;
+            }
+
+            header,
+            .inputs,
+            .action-tools,
+            .view-switch,
+            .layers,
+            .toast,
+            .footer,
+            .live-label,
+            .intro {
+                display: none !important;
+            }
+
+            body {
+                background: white;
+                color: black;
+            }
+
+            main {
+                max-width: 100%;
+                padding: 0;
+            }
+
+            .workspace {
+                display: block;
+            }
+
+            .result-main {
+                background: #12233d !important;
+                color: white !important;
+                print-color-adjust: exact !important;
+                -webkit-print-color-adjust: exact !important;
+            }
+
+            .diagram-bar {
+                print-color-adjust: exact !important;
+                -webkit-print-color-adjust: exact !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <a class="skip" href="#workspace">ข้ามไปเครื่องคำนวณ</a>
+    <header>
+        <div class="bar">
+            <div class="brand">
+                <span class="brand-icon" aria-hidden="true">◉</span>
+                <span>RollPack <em>Pro</em></span>
+            </div>
+            <nav class="nav-tabs" aria-label="การเลือกหน้าคำนวณ">
+                <a href="index.html" class="nav-tab">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"></path><path d="m3.3 7 8.7 5 8.7-5"></path><path d="M12 22V12"></path></svg>
+                    <span>จัดเรียงตู้คอนเทนเนอร์</span>
+                </a>
+                <a href="line-production.html" class="nav-tab active" aria-current="page">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 20a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8l-6 4V8l-6 4V4H2Z"></path><path d="M17 18h1"></path><path d="M12 18h1"></path><path d="M7 18h1"></path></svg>
+                    <span>คำนวณไลน์ผลิต</span>
+                    <span class="nav-tab-badge">ใหม่</span>
+                </a>
+            </nav>
+            <div class="header-tools">
+                <button type="button" id="copy-spec-btn-header" class="header-action-btn" title="คัดลอกสรุปผลการจัดไลน์ผลิต">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                    <span>คัดลอกสรุป</span>
+                </button>
+                <button type="button" id="print-btn-header" class="header-action-btn" title="พิมพ์ใบสั่งผลิตหรือบันทึก PDF">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+                    <span>พิมพ์</span>
+                </button>
+                <button type="button" id="reset-button">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path></svg>
+                    <span>เริ่มใหม่</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main id="workspace">
+        <div class="intro">
+            <div>
+                <h1>วางแผนไลน์การผลิตม้วนกระดาษ</h1>
+                <p class="muted">เลือกเครื่องจักร ใส่รายการออเดอร์ แล้วดูเครื่องจักรที่คุ้มค่าและผังชุดตัดได้ทันที</p>
+            </div>
+            <span class="live-label">คำนวณอัตโนมัติเมื่อแก้ไขข้อมูล</span>
+        </div>
+
+        <div class="workspace">
+            <!-- Left Inputs -->
+            <div class="inputs">
+                <!-- Step 1: Machines -->
+                <section class="card" aria-labelledby="mach-title">
+                    <div class="section-title">
+                        <span class="step">1</span>
+                        <h2 id="mach-title">เครื่องจักรในโรงงาน (คลิกเพื่อเปิด/ปิดเครื่อง)</h2>
+                    </div>
+
+                    <div class="presets" id="machine-presets">
+                        <!-- Rendered by JS -->
+                    </div>
+
+                    <p class="spec-summary" id="mach-summary">
+                        กำลังตรวจสอบข้อมูลเครื่องจักร...
+                    </p>
+
+                    <details id="machine-details">
+                        <summary>ดู / ปรับสเปกหน้ากว้าง & ต้นทุนเครื่องจักร</summary>
+                        <div id="machine-fields" style="display: grid; gap: 10px; margin-top: 8px;">
+                            <!-- Injected by JS -->
+                        </div>
+                        <p class="hint">ค่าเริ่มต้นของ PM2, PM3, PM5 ตรงตามสเปกโรงงาน ส่วน PM1 กำหนดไว้ 1,600-1,800 มม. สามารถแก้ไขได้</p>
+                    </details>
+                </section>
+
+                <!-- Step 2: Orders -->
+                <section class="card" aria-labelledby="order-title">
+                    <div class="section-title">
+                        <span class="step">2</span>
+                        <h2 id="order-title">ใส่ข้อมูลออเดอร์ม้วนกระดาษ</h2>
+                    </div>
+
+                    <div class="samples">
+                        <span>ลองตัวอย่าง:</span>
+                        <button type="button" data-sample="mix">ผสม KT+CA</button>
+                        <button type="button" data-sample="ca-only">CA ล้วน</button>
+                        <button type="button" data-sample="kt-large">KT หน้ากว้าง</button>
+                        <button type="button" data-sample="multi">หลายขนาด</button>
+                    </div>
+
+                    <div class="orders-box">
+                        <table class="orders-table">
+                            <thead>
+                                <tr>
+                                    <th style="width: 24px;">#</th>
+                                    <th style="width: 65px;">เกรด</th>
+                                    <th>หน้ากว้าง (มม.)</th>
+                                    <th>จำนวน (ม้วน)</th>
+                                    <th style="width: 28px;"></th>
+                                </tr>
+                            </thead>
+                            <tbody id="orders-tbody">
+                                <!-- Rendered by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="order-row-actions">
+                        <button type="button" class="primary" id="add-order-btn" style="min-height: 38px; padding: 6px 12px;">
+                            ＋ เพิ่มออเดอร์
+                        </button>
+                        <span class="num" id="order-quick-summary" style="font-size: .8125rem; color: var(--muted);">0 รายการ</span>
+                    </div>
+
+                    <!-- Strategy Segmented Control (Matches RollPack Pro Orientation) -->
+                    <div class="orientation">
+                        <p>เป้าหมายความคุ้มค่า (Optimization Strategy)</p>
+                        <div class="seg" role="group" aria-label="เป้าหมายความคุ้มค่า">
+                            <button type="button" data-strategy="recommended" aria-pressed="true">
+                                <span class="seg-icon" aria-hidden="true">★</span>
+                                <span>แนะนำโดยระบบ</span>
+                            </button>
+                            <button type="button" data-strategy="min-machines" aria-pressed="false">
+                                <span class="seg-icon" aria-hidden="true">⚡</span>
+                                <span>เดินเครื่องน้อยสุด</span>
+                            </button>
+                            <button type="button" data-strategy="min-waste" aria-pressed="false">
+                                <span class="seg-icon" aria-hidden="true">🌿</span>
+                                <span>เศษกระดาษต่ำสุด</span>
+                            </button>
+                        </div>
+                        <p class="hint" id="strategy-help">
+                            วิเคราะห์จุดสมดุลที่ดีที่สุดระหว่างการประหยัดค่าเดินเครื่องหลายเครื่องพร้อมกันกับมูลค่าเศษกระดาษ Trim Loss
+                        </p>
+                    </div>
+
+                    <details id="paste-details">
+                        <summary>📋 วางข้อมูลหลายแถวจาก Excel / Google Sheets</summary>
+                        <p class="hint" style="margin-bottom: 8px;">คัดลอกเซลล์ 3 หรือ 4 คอลัมน์: <strong>[เกรด (KT/CA)] [หน้ากว้าง (มม.)] [จำนวนม้วน] [ชื่อออเดอร์ (ไม่ระบุก็ได้)]</strong></p>
+                        <textarea id="paste-textarea" rows="4" style="width: 100%; border: 1px solid var(--line); border-radius: 8px; padding: 8px; font-family: monospace; font-size: .8125rem;" placeholder="ตัวอย่าง:
+KT	1100	60
+KT	950	50
+CA	1200	80
+CA	1050	70"></textarea>
+                        <div style="margin-top: 8px; text-align: right;">
+                            <button type="button" id="apply-paste-btn" class="primary" style="min-height: 36px; padding: 4px 14px;">นำเข้าข้อมูล</button>
+                        </div>
+                    </details>
+                </section>
+            </div>
+
+            <!-- Right Results -->
+            <section class="results" id="results" aria-labelledby="result-title">
+                <div class="results-header">
+                    <div class="section-title">
+                        <span class="step">3</span>
+                        <h2 id="result-title">ผลการคำนวณและผังชุดตัด</h2>
+                    </div>
+                    <div class="action-tools">
+                        <button type="button" id="copy-spec-btn" class="action-btn" title="คัดลอกรายละเอียดและผลการคำนวณทั้งหมด">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                            <span class="btn-text">คัดลอกสเปก</span>
+                        </button>
+                        <button type="button" id="print-btn" class="action-btn" title="พิมพ์รายงานหรือบันทึกเป็น PDF">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+                            <span class="btn-text">พิมพ์</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Primary Result Main (Dark Navy, matches RollPack Pro) -->
+                <div class="result-main">
+                    <div class="result-top">
+                        <div>
+                            <p class="eyebrow">เครื่องจักรที่แนะนำสูงสุด</p>
+                            <div class="count-line">
+                                <strong class="big-count num" id="result-machine">—</strong>
+                                <span id="result-machine-sub">เครื่องเดียว</span>
+                            </div>
+                            <p class="result-detail" id="result-detail">
+                                กำลังคำนวณรูปแบบการตัดที่คุ้มค่าที่สุด...
+                            </p>
+                        </div>
+                        <span class="status-pill" id="result-badge">กำลังคำนวณ</span>
+                    </div>
+
+                    <div class="result-bottom">
+                        <div>
+                            <label>จำนวนเครื่องเปิด</label>
+                            <strong class="num" id="stat-active-machines">—</strong>
+                        </div>
+                        <div>
+                            <label>เศษ Trim Loss</label>
+                            <strong class="num" id="stat-trim">—</strong>
+                        </div>
+                        <div>
+                            <label>แม่ม้วนที่ผลิต</label>
+                            <strong class="num" id="stat-sets">—</strong>
+                        </div>
+                        <div>
+                            <label>ม้วนออเดอร์รวม</label>
+                            <strong class="num" id="stat-rolls">—</strong>
+                        </div>
+                    </div>
+
+                    <div class="progress-row">
+                        <span>สัดส่วนการใช้หน้ากระดาษแม่ม้วน (Deckle Yield)</span>
+                        <span class="num" id="stat-utilization">—</span>
+                    </div>
+                    <progress id="yield-progress" max="100" value="0" aria-label="สัดส่วนการใช้หน้ากระดาษ"></progress>
+                </div>
+
+                <!-- Slitting Diagram Card -->
+                <div class="card">
+                    <div class="plan-header">
+                        <div>
+                            <h3>ผังจำลองชุดตัดแม่ม้วน (Slitting Diagram)</h3>
+                            <p id="plan-subtitle">ชุดตัดที่ 1 จาก 1</p>
+                        </div>
+                        <div class="view-switch" role="group" aria-label="มุมมองผัง">
+                            <button type="button" id="view-mode-single" aria-pressed="true">ทีละชุด</button>
+                            <button type="button" id="view-mode-all" aria-pressed="false">ทุกชุดตัด</button>
+                        </div>
+                    </div>
+
+                    <div id="diagram-area" class="diagram">
+                        <!-- Populated by JS -->
+                    </div>
+
+                    <div class="plan-footer">
+                        <div class="legend">
+                            <span><i class="swatch"></i>ม้วนที่ตัดได้</span>
+                            <span><i class="swatch trim"></i>เศษริม (Trim Loss)</span>
+                            <span><i class="swatch knife"></i>ใบมีดกรีด</span>
+                        </div>
+                        <div class="layers" id="pattern-controls">
+                            <span>ชุดตัด</span>
+                            <button type="button" id="pat-prev" aria-label="ดูชุดตัดก่อนหน้า">‹</button>
+                            <span class="num" id="pat-label">1 / 1</span>
+                            <button type="button" id="pat-next" aria-label="ดูชุดตัดถัดไป">›</button>
+                        </div>
+                    </div>
+
+                    <div class="mini-stats">
+                        <div>
+                            <span>หน้ากว้างแม่ม้วนที่ตั้ง</span>
+                            <strong id="mini-deckle" class="num">—</strong>
+                        </div>
+                        <div>
+                            <span>รอบผลิตชุดนี้</span>
+                            <strong id="mini-sets" class="num">—</strong>
+                        </div>
+                        <div>
+                            <span>ม้วนที่ได้จากชุดนี้</span>
+                            <strong id="mini-output" class="num">—</strong>
+                        </div>
+                    </div>
+
+                    <!-- Expandable Machine Comparison (Like RollPack Comparison) -->
+                    <details id="comparison-details">
+                        <summary>เปรียบเทียบทุกแผนการเดินเครื่อง</summary>
+                        <div class="table-scroll">
+                            <table class="comparison">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">แผนเครื่องจักร</th>
+                                        <th scope="col">จำนวนเครื่อง</th>
+                                        <th scope="col">เศษ Trim (%)</th>
+                                        <th scope="col">แม่ม้วน (Sets)</th>
+                                        <th scope="col">การประเมิน</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="comparison-tbody">
+                                    <!-- Populated by JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                        <p class="hint">คลิกแถวที่ต้องการเพื่อเลือกดูผังชุดตัดของแผนนั้น ระบบจะเลือกแผนที่คุ้มค่าต้นทุนรวมสูงสุดให้อัตโนมัติ</p>
+                    </details>
+
+                    <!-- Expandable Work Order Table -->
+                    <details id="workorder-details">
+                        <summary>ดูใบสั่งงานสำหรับช่างคุมเครื่อง (Slitter Work Order)</summary>
+                        <div class="table-scroll">
+                            <table class="comparison">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">ชุดตัด #</th>
+                                        <th scope="col">เครื่องจักร</th>
+                                        <th scope="col">เกรด</th>
+                                        <th scope="col">หน้ากว้างแม่ม้วน</th>
+                                        <th scope="col">ขนาดม้วนที่ตัด (มม.)</th>
+                                        <th scope="col">ตำแหน่งมีด (มม.)</th>
+                                        <th scope="col">รอบผลิต (Sets)</th>
+                                        <th scope="col">เศษริม (มม.)</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="workorder-tbody">
+                                    <!-- Populated by JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </details>
+                </div>
+
+                <div class="notes">
+                    <p>ผลการคำนวณเป็นการจำลองการจัดชุดตัด (Cutting Stock Pattern) ตามช่วงหน้ากว้างของเครื่องจักรที่เปิดใช้งาน</p>
+                    <p>ก่อนเริ่มการผลิตจริง ฝ่ายผลิตควรตรวจสอบการรับแรงดึงของใบมีดกรีด การสำรองเศษริม และคลังสต็อกแม่ม้วน</p>
+                </div>
+            </section>
+        </div>
+
+        <div class="footer">
+            <span>RollPack Pro · เครื่องมือวางแผนไลน์ผลิตและตัดม้วนกระดาษ</span>
+            <span>สเปกเครื่องจักรและรายการออเดอร์สามารถปรับเปลี่ยนได้ตามจริง</span>
+        </div>
+    </main>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+    <script src="./line-production.js"></script>
+</body>
+
+</html>
